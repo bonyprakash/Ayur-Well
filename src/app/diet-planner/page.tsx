@@ -223,7 +223,7 @@ export default function DietPlannerPage() {
                <Card className="shadow-lg border-t-4 border-primary">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 font-headline text-2xl">
-                    <WandSparkles className="text-primary" /> AI Remedy Finder
+                    <WandSparkles className="text-primary" /> Remedy Finder
                   </CardTitle>
                   <CardDescription>
                     Describe an ailment, and our AI will suggest a natural,
