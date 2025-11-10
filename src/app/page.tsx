@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header />
-      <main className="flex flex-1 flex-col items-center animate-fade-in">
-         <section className="relative w-full h-[80vh] flex items-center justify-center text-center text-primary-dark bg-gradient-to-br from-green-100 to-green-50">
+      <main className="flex flex-1 flex-col items-center">
+         <section className="relative w-full h-[80vh] flex items-center justify-center text-center text-primary-dark bg-gradient-to-br from-green-100 to-green-50 animate-fade-in">
           <div className="space-y-6 max-w-4xl p-4 z-10">
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline leading-tight">
               Embrace Nature.
@@ -62,7 +62,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="principles" className="w-full max-w-6xl py-20 md:py-28 px-4">
+        <section id="principles" className="w-full max-w-6xl py-20 md:py-28 px-4 animate-fade-in-up">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Principles of Naturopathy</h2>
               <p className="text-muted-foreground mt-3 text-lg">Embrace a lifestyle that aligns with nature's wisdom.</p>
