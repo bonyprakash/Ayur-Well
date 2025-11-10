@@ -8,114 +8,72 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import type {
-  DoshaIdentificationOutput,
-  SuggestRemediesOutput,
-} from '@/ai/flows/remedy-suggestion';
 import {Button} from './ui/button';
-import {RemedySection} from './remedy-section';
+import { WellnessPlanOutput } from '@/ai/flows/wellness-plan';
 
 type ResultsDashboardProps = {
-  doshaResult: DoshaIdentificationOutput | null;
-  remediesResult: SuggestRemediesOutput | null;
-  remedyTracking: Record<
-    string,
-    Record<string, {tried: boolean; helpful: boolean}>
-  >;
-  onTrack: (
-    category: string,
-    remedy: string,
-    field: 'tried' | 'helpful',
-    value: boolean
-  ) => void;
+  results: WellnessPlanOutput | null;
   onReset: () => void;
-  doshaDetails: any;
-  remedyCategories: readonly {
-    key: keyof SuggestRemediesOutput;
+  resultCategories: readonly {
+    key: keyof WellnessPlanOutput;
     title: string;
     icon: React.ElementType;
   }[];
 };
 
+function formatContent(text: string): string[] {
+    if (!text) return [];
+    // Split by markdown list items or numbered list items
+    return text
+        .split(/\n\s*(?:-|\*|\d+\.)\s+/)
+        .map(s => s.trim().replace(/\*\*(.*?)\*\*/g, '$1')) // Remove bold markdown
+        .filter(s => s.length > 0);
+}
+
+
 export function ResultsDashboard({
-  doshaResult,
-  remediesResult,
-  remedyTracking,
-  onTrack,
+  results,
   onReset,
-  doshaDetails,
-  remedyCategories,
+  resultCategories,
 }: ResultsDashboardProps) {
-  if (!doshaResult || !remediesResult) {
+  if (!results) {
     return null;
   }
 
-  const {dosha, reasoning} = doshaResult;
-  const details = doshaDetails[dosha] || {};
-  const Icon = details.icon;
-
   return (
     <div className="w-full space-y-6 animate-in fade-in-50 duration-500">
-      <Card className="w-full shadow-lg overflow-hidden">
-        <CardHeader className="bg-muted/30">
-          <div className="flex items-start gap-4">
-            {Icon && <Icon className={`w-12 h-12 shrink-0 ${details.color}`} />}
-            <div>
-              <CardDescription>Your Primary Dosha Imbalance</CardDescription>
-              <CardTitle className={`text-4xl font-headline ${details.color}`}>
-                {dosha}
-              </CardTitle>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-6 text-base">
-          <p className="font-semibold mb-2">{details.description}</p>
-          <p className="text-muted-foreground">{reasoning}</p>
-        </CardContent>
+        {resultCategories.map(category => {
+            const content = results[category.key];
+            const Icon = category.icon;
+            const listItems = formatContent(content);
+
+            return (
+                 <Card key={category.key} className="shadow-lg">
+                    <CardHeader className="flex flex-row items-center space-x-3 space-y-0">
+                        <Icon className="w-6 h-6 text-primary" />
+                        <CardTitle className="text-2xl font-headline">{category.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-base space-y-2 pl-12">
+                        {listItems.length > 1 ? (
+                             <ul className="space-y-3 list-disc pl-5 text-muted-foreground">
+                                {listItems.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-muted-foreground">{content}</p>
+                        )}
+                    </CardContent>
+                </Card>
+            )
+        })}
+     
+      <Card>
         <CardFooter>
           <Button variant="outline" onClick={onReset}>
             Start Over
           </Button>
         </CardFooter>
-      </Card>
-
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl font-headline">
-            Personalized Recommendations
-          </CardTitle>
-          <CardDescription>
-            Explore these natural ways to bring balance to your {dosha} dosha.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue={remedyCategories[0].key} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 h-auto">
-              {remedyCategories.map(cat => (
-                <TabsTrigger
-                  key={cat.key}
-                  value={cat.key}
-                  className="text-xs sm:text-sm"
-                >
-                  {cat.title}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {remedyCategories.map(cat => (
-              <TabsContent key={cat.key} value={cat.key}>
-                <RemedySection
-                  title={cat.title}
-                  icon={cat.icon}
-                  content={remediesResult[cat.key]}
-                  categoryKey={cat.key}
-                  trackingData={remedyTracking[cat.key] || {}}
-                  onTrack={onTrack}
-                />
-              </TabsContent>
-            ))}
-          </Tabs>
-        </CardContent>
       </Card>
     </div>
   );

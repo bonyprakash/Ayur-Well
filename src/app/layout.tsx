@@ -5,9 +5,9 @@ import {Toaster} from '@/components/ui/toaster';
 import {cn} from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'AyurWell',
+  title: 'NaturaLife',
   description:
-    'Your personal Ayurvedic health advisor for natural remedies and a balanced life.',
+    'Your personal naturopathic advisor for healthy living and balanced nutrition.',
 };
 
 const alegreya = Alegreya({
