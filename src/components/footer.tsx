@@ -35,10 +35,6 @@ export function Footer() {
         </div>
         <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
           <p>NaturaLife © {new Date().getFullYear()}</p>
-          <p className="text-xs mt-1">
-            Disclaimer: This tool provides suggestions based on naturopathic
-            principles and is not a substitute for professional medical advice.
-          </p>
         </div>
       </div>
     </footer>

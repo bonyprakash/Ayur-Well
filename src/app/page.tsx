@@ -1,9 +1,7 @@
 'use client';
 
-import {Leaf, Zap, HeartPulse, BrainCircuit, Grape, PersonStanding, Bed, ArrowDown} from 'lucide-react';
+import {Leaf, Grape, PersonStanding, Bed, ArrowDown} from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
-
 import {Button} from '@/components/ui/button';
 import {
   Card,
