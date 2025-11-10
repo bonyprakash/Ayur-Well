@@ -3,6 +3,7 @@ import {Alegreya} from 'next/font/google';
 import './globals.css';
 import {Toaster} from '@/components/ui/toaster';
 import {cn} from '@/lib/utils';
+import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
   title: 'NaturaLife',
@@ -36,12 +37,15 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased',
+          'min-h-screen bg-background font-body antialiased flex flex-col',
           alegreya.variable
         )}
       >
-        {children}
+        <div className="flex-grow">
+            {children}
+        </div>
         <Toaster />
+        <Footer />
       </body>
     </html>
   );
