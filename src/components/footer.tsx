@@ -1,10 +1,17 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
 import { Logo } from './logo';
 import Link from 'next/link';
 
 export function Footer() {
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+  
   return (
     <footer className="bg-card text-card-foreground border-t">
       <div className="container py-8">
@@ -34,7 +41,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
-          <p>NaturaLife © {new Date().getFullYear()}</p>
+          {currentYear && <p>NaturaLife © {currentYear}</p>}
         </div>
       </div>
     </footer>
