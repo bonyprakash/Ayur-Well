@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import {Alegreya} from 'next/font/google';
+import {Inter} from 'next/font/google';
 import './globals.css';
 import {Toaster} from '@/components/ui/toaster';
 import {cn} from '@/lib/utils';
@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   keywords: 'naturopathy, wellness, diet planner, herbal remedies, healthy living, natural health',
 };
 
-const alegreya = Alegreya({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-alegreya',
+  variable: '--font-inter',
 });
 
 export default function RootLayout({
@@ -23,22 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+      <head />
       <body
         className={cn(
           'min-h-screen bg-background font-body antialiased flex flex-col',
-          alegreya.variable
+          inter.variable
         )}
       >
         <div className="flex-grow">
