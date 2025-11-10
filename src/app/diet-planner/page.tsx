@@ -22,6 +22,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -48,10 +49,10 @@ import {Header} from '@/components/header';
 import {ResultsDashboard} from '@/components/results-dashboard';
 
 const lifestyleOptions = [
-  {value: 'sedentary', label: 'Sedentary (little to no exercise)'},
-  {value: 'lightly_active', label: 'Lightly Active (light exercise/sports 1-3 days/week)'},
-  {value: 'moderately_active', label: 'Moderately Active (moderate exercise/sports 3-5 days/week)'},
-  {value: 'very_active', label: 'Very Active (hard exercise/sports 6-7 days a week)'},
+  {value: 'sedentary', label: 'Sedentary (little to no exercise)', multiplier: 1.2},
+  {value: 'lightly_active', label: 'Lightly Active (light exercise 1-3 days/week)', multiplier: 1.375},
+  {value: 'moderately_active', label: 'Moderately Active (moderate exercise 3-5 days/week)', multiplier: 1.55},
+  {value: 'very_active', label: 'Very Active (hard exercise 6-7 days/week)', multiplier: 1.725},
 ];
 
 const healthGoals = [
@@ -64,9 +65,11 @@ const healthGoals = [
 
 const formSchema = z.object({
   age: z.coerce.number().positive({message: 'Please enter a valid age.'}).min(18, {message: "You must be at least 18 years old."}),
-  gender: z.enum(['male', 'female', 'other'], {
+  gender: z.enum(['male', 'female'], {
     required_error: 'Please select a gender.',
   }),
+   height: z.coerce.number().positive({message: 'Please enter a valid height in cm.'}),
+  weight: z.coerce.number().positive({message: 'Please enter a valid weight in kg.'}),
   lifestyle: z.enum(
     ['sedentary', 'lightly_active', 'moderately_active', 'very_active'],
     {required_error: 'Please select your lifestyle.'}
@@ -76,31 +79,24 @@ const formSchema = z.object({
   }),
 });
 
-type UserProfile = {
-  height: number | null;
-  weight: number | null;
-};
+type FormValues = z.infer<typeof formSchema>;
+
 
 const resultCategories = [
     { key: 'introduction', title: 'Your Personal Plan', icon: HeartPulse },
     { key: 'nutritionalGuidance', title: 'Nutritional Guidance', icon: Leaf },
     { key: 'mealPlan', title: 'Sample Meal Plan', icon: Soup },
-    { key: 'calorieGuidance', title: 'Calorie Guidance', icon: Flame },
     { key: 'wellnessPractices', title: 'Wellness Practices', icon: PersonStanding },
 ] as const;
 
 
 export default function DietPlannerPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<WellnessPlanOutput | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile>({
-    height: null,
-    weight: null,
-  });
+  const [results, setResults] = useState<WellnessPlanOutput & { dailyCalories?: number } | null>(null);
 
   const {toast} = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       age: 25,
@@ -110,20 +106,32 @@ export default function DietPlannerPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const calculateBMR = (values: FormValues) => {
+    // Mifflin-St Jeor Equation:
+    // BMR = 10 * weight (kg) + 6.25 * height (cm) - 5 * age (y) + s
+    // s is +5 for males and -161 for females
+    const s = values.gender === 'male' ? 5 : -161;
+    const bmr = (10 * values.weight) + (6.25 * values.height) - (5 * values.age) + s;
+    const activityMultiplier = lifestyleOptions.find(opt => opt.value === values.lifestyle)?.multiplier || 1.2;
+    return Math.round(bmr * activityMultiplier);
+  };
+
+
+  async function onSubmit(values: FormValues) {
     setIsLoading(true);
     setResults(null);
+
+    const dailyCalories = calculateBMR(values);
 
     try {
       const wellnessPlan = await generateWellnessPlan({
         ...values,
-        height: userProfile.height ?? undefined,
-        weight: userProfile.weight ?? undefined,
+        dailyCalories: dailyCalories
       });
       if (!wellnessPlan) {
         throw new Error('Could not generate a wellness plan.');
       }
-      setResults(wellnessPlan);
+      setResults({...wellnessPlan, dailyCalories});
     } catch (error) {
       console.error(error);
       toast({
@@ -136,39 +144,27 @@ export default function DietPlannerPage() {
     }
   }
 
-  const handleProfileSave = (profile: UserProfile) => {
-    setUserProfile(profile);
-    toast({
-      title: 'Profile Saved',
-      description: 'Your information has been updated.',
-    });
-  };
-
   const resetForm = () => {
     form.reset();
     setResults(null);
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header
-        userProfile={userProfile}
-        onProfileSave={handleProfileSave}
-        showProfileSheet={!results}
-      />
+    <div className="flex min-h-screen w-full flex-col bg-background">
+      <Header />
       <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8">
         <div className="w-full max-w-4xl">
           {!results ? (
             <div className="space-y-8">
               <div className="text-center space-y-2">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline text-primary">
                   Your Personal Diet Planner
                 </h1>
                 <p className="text-muted-foreground text-lg sm:text-xl">
                   Create your personalized naturopathic wellness plan.
                 </p>
               </div>
-              <Card className="shadow-lg">
+              <Card className="shadow-lg border-t-4 border-primary">
                 <CardHeader>
                   <CardTitle className="text-2xl font-headline">
                     Create Your Wellness Profile
@@ -185,7 +181,7 @@ export default function DietPlannerPage() {
                       className="space-y-6"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
+                         <FormField
                           control={form.control}
                           name="age"
                           render={({field}) => (
@@ -216,9 +212,34 @@ export default function DietPlannerPage() {
                                 <SelectContent>
                                   <SelectItem value="male">Male</SelectItem>
                                   <SelectItem value="female">Female</SelectItem>
-                                  <SelectItem value="other">Other</SelectItem>
                                 </SelectContent>
                               </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="height"
+                          render={({field}) => (
+                            <FormItem>
+                              <FormLabel>Height (cm)</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="e.g., 175" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="weight"
+                          render={({field}) => (
+                            <FormItem>
+                              <FormLabel>Weight (kg)</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="e.g., 70" {...field} />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -264,7 +285,7 @@ export default function DietPlannerPage() {
                                 Select one or more goals you'd like to achieve.
                               </FormDescription>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                               {healthGoals.map(item => (
                                 <FormField
                                   key={item.id}
@@ -274,7 +295,7 @@ export default function DietPlannerPage() {
                                     return (
                                       <FormItem
                                         key={item.id}
-                                        className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors"
+                                        className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer"
                                       >
                                         <FormControl>
                                           <Checkbox
@@ -293,7 +314,7 @@ export default function DietPlannerPage() {
                                             }}
                                           />
                                         </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
+                                        <FormLabel className="font-normal cursor-pointer w-full">
                                           {item.label}
                                         </FormLabel>
                                       </FormItem>
@@ -307,32 +328,50 @@ export default function DietPlannerPage() {
                         )}
                       />
 
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full sm:w-auto"
-                        size="lg"
-                      >
-                        {isLoading ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Generating Your Plan...
-                          </>
-                        ) : (
-                          'Get My Wellness Plan'
-                        )}
-                      </Button>
+                      <div className="flex justify-center pt-4">
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full md:w-1/2"
+                            size="lg"
+                        >
+                            {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Generating Your Plan...
+                            </>
+                            ) : (
+                            'Get My Wellness Plan'
+                            )}
+                        </Button>
+                      </div>
                     </form>
                   </Form>
                 </CardContent>
               </Card>
             </div>
           ) : (
-             <ResultsDashboard
-                results={results}
-                onReset={resetForm}
-                resultCategories={resultCategories}
-            />
+            <div className="space-y-6">
+                {results.dailyCalories && (
+                     <Card className="bg-primary/10 border-primary shadow-lg">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-3 text-xl font-headline text-primary">
+                                <Flame className="w-6 h-6" />
+                                Estimated Daily Calorie Needs
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-4xl font-bold text-center text-primary">{results.dailyCalories} <span className="text-xl font-medium text-muted-foreground">kcal/day</span></p>
+                             <p className="text-center text-sm text-muted-foreground mt-2">This is an estimate for maintaining your current weight. The meal plan below is tailored to your health goals.</p>
+                        </CardContent>
+                    </Card>
+                )}
+                <ResultsDashboard
+                    results={results}
+                    onReset={resetForm}
+                    resultCategories={resultCategories}
+                />
+            </div>
           )}
         </div>
       </main>

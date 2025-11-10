@@ -24,10 +24,20 @@ type ResultsDashboardProps = {
 function formatContent(text: string): string[] {
     if (!text) return [];
     // Split by markdown list items or numbered list items
-    return text
-        .split(/\n\s*(?:-|\*|\d+\.)\s+/)
-        .map(s => s.trim().replace(/\*\*(.*?)\*\*/g, '$1')) // Remove bold markdown
-        .filter(s => s.length > 0);
+    const cleanedText = text
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markdown
+        .replace(/###\s*(.*)/g, '$1'); // Remove ### headings
+        
+    const items = cleanedText.split(/\n\s*(?:-|\*|\d+\.)\s+/).map(s => s.trim()).filter(s => s.length > 0);
+
+    // Further split items that might contain sub-headings
+    const finalItems: string[] = [];
+    items.forEach(item => {
+        const subItems = item.split(/\n\n/);
+        finalItems.push(...subItems);
+    });
+    
+    return finalItems;
 }
 
 
@@ -68,13 +78,11 @@ export function ResultsDashboard({
             )
         })}
      
-      <Card>
-        <CardFooter>
-          <Button variant="outline" onClick={onReset}>
+      <div className="flex justify-center pt-4">
+          <Button variant="outline" onClick={onReset} size="lg">
             Start Over
           </Button>
-        </CardFooter>
-      </Card>
+      </div>
     </div>
   );
 }
