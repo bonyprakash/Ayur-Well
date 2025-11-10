@@ -73,7 +73,7 @@ const wellnessPlanFormSchema = z.object({
   weight: z.coerce.number().positive({message: 'Please enter a valid weight in kg.'}),
   lifestyle: z.enum(
     ['sedentary', 'lightly_active', 'moderately_active', 'very_active'],
-    {required_error: 'Please select your lifestyle.'}
+    {required_error: 'Please select your activity level.'}
   ),
   healthGoals: z.array(z.string()).refine(value => value.some(item => item), {
     message: 'You have to select at least one health goal.',
