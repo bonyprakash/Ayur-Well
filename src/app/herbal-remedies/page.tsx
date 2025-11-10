@@ -1,17 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Header } from '@/components/header';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from '@/components/ui/card';
 import {
   Accordion,
@@ -19,15 +13,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Leaf, AlertTriangle, WandSparkles, Loader2, Sparkles } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import {
-  suggestRemedy,
-  type SuggestRemedyOutput,
-} from '@/ai/flows/suggest-remedy';
-import { useToast } from '@/hooks/use-toast';
+import { Leaf, AlertTriangle } from 'lucide-react';
+import { Header } from '@/components/header';
+
 
 const remedies = [
   {
@@ -62,41 +50,9 @@ const remedies = [
   },
 ];
 
-const remedyFormSchema = z.object({
-  problem: z.string().min(10, { message: 'Please describe your problem in at least 10 characters.' }),
-});
 
 export default function HerbalRemediesPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [remedySuggestion, setRemedySuggestion] = useState<SuggestRemedyOutput | null>(null);
-  const { toast } = useToast();
-
-  const form = useForm<z.infer<typeof remedyFormSchema>>({
-    resolver: zodResolver(remedyFormSchema),
-  });
-
-  async function onSubmit(values: z.infer<typeof remedyFormSchema>) {
-    setIsLoading(true);
-    setRemedySuggestion(null);
-    try {
-      const result = await suggestRemedy(values);
-      if (!result) {
-        throw new Error('Failed to get a suggestion.');
-      }
-      setRemedySuggestion(result);
-    } catch (error) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: 'An error occurred',
-        description: 'Failed to get a remedy suggestion. Please try again.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-
+  
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header />
@@ -107,82 +63,7 @@ export default function HerbalRemediesPage() {
               Herbal Remedies
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl">
-              Discover the healing power of nature.
-            </p>
-          </div>
-
-          <Card className="shadow-lg border-t-4 border-primary">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 font-headline text-2xl">
-                <WandSparkles className="text-primary" /> AI Remedy Finder
-              </CardTitle>
-              <CardDescription>
-                Describe your ailment, and our AI will suggest a natural,
-                naturopathic remedy for you.
-              </CardDescription>
-            </CardHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="problem"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Textarea
-                          placeholder="e.g., 'I have a persistent dry cough and a sore throat...'"
-                          className="min-h-[100px]"
-                          {...field}
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-                <CardFooter className="flex-col items-start gap-4">
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Finding a Remedy...
-                      </>
-                    ) : (
-                      'Get Suggestion'
-                    )}
-                  </Button>
-                  
-                  {remedySuggestion && (
-                     <Card className="w-full bg-primary/10 animate-fade-in">
-                        <CardContent className="p-6 space-y-4">
-                            <div className="flex items-start gap-3">
-                                <Sparkles className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                                <div>
-                                    <h4 className="font-bold text-lg text-primary-dark">Suggested Remedy</h4>
-                                    <p className="text-muted-foreground">{remedySuggestion.remedy}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <AlertTriangle className="h-5 w-5 text-destructive/80 flex-shrink-0 mt-1" />
-                                 <div>
-                                    <h4 className="font-bold text-lg text-destructive/90">Disclaimer</h4>
-                                    <p className="text-muted-foreground">{remedySuggestion.disclaimer}</p>
-                                </div>
-                            </div>
-                        </CardContent>
-                     </Card>
-                  )}
-
-                </CardFooter>
-              </form>
-            </Form>
-          </Card>
-
-          <div className="text-center space-y-2 pt-8">
-             <h2 className="text-2xl md:text-3xl font-bold font-headline">
-              Common Herbal Library
-            </h2>
-            <p className="text-muted-foreground">
-              Learn about these powerful, everyday herbs.
+              Discover the healing power of nature's most common herbs.
             </p>
           </div>
 

@@ -13,12 +13,20 @@ import {
   PersonStanding,
   Lightbulb,
   X,
+  WandSparkles,
+  Sparkles,
+  AlertTriangle
 } from 'lucide-react';
 
 import {
   generateWellnessPlan,
   type WellnessPlanOutput,
 } from '@/ai/flows/wellness-plan';
+import {
+  suggestRemedy,
+  type SuggestRemedyOutput,
+} from '@/ai/flows/suggest-remedy';
+
 import {Button} from '@/components/ui/button';
 import {
   Card,
@@ -45,27 +53,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {Textarea} from '@/components/ui/textarea';
 import {Checkbox} from '@/components/ui/checkbox';
 import {useToast} from '@/hooks/use-toast';
 import {Header} from '@/components/header';
 import {ResultsDashboard} from '@/components/results-dashboard';
 
-const lifestyleOptions = [
-  {value: 'sedentary', label: 'Sedentary (little to no exercise)', multiplier: 1.2},
-  {value: 'lightly_active', label: 'Lightly Active (light exercise 1-3 days/week)', multiplier: 1.375},
-  {value: 'moderately_active', label: 'Moderately Active (moderate exercise 3-5 days/week)', multiplier: 1.55},
-  {value: 'very_active', label: 'Very Active (hard exercise 6-7 days/week)', multiplier: 1.725},
-];
 
-const healthGoals = [
-  {id: 'weight_loss', label: 'Weight Loss'},
-  {id: 'detox', label: 'Detoxification'},
-  {id: 'stress_relief', label: 'Stress Relief'},
-  {id: 'immunity_boosting', label: 'Immunity Boosting'},
-  {id: 'increase_energy', label: 'Increase Energy'},
-] as const;
+const remedyFormSchema = z.object({
+  problem: z.string().min(10, { message: 'Please describe your problem in at least 10 characters.' }),
+});
 
-const formSchema = z.object({
+const wellnessPlanFormSchema = z.object({
   age: z.coerce.number().positive({message: 'Please enter a valid age.'}).min(18, {message: "You must be at least 18 years old."}),
   gender: z.enum(['male', 'female'], {
     required_error: 'Please select a gender.',
@@ -81,8 +80,22 @@ const formSchema = z.object({
   }),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type WellnessPlanFormValues = z.infer<typeof wellnessPlanFormSchema>;
 
+const lifestyleOptions = [
+  {value: 'sedentary', label: 'Sedentary (little to no exercise)', multiplier: 1.2},
+  {value: 'lightly_active', label: 'Lightly Active (light exercise 1-3 days/week)', multiplier: 1.375},
+  {value: 'moderately_active', label: 'Moderately Active (moderate exercise 3-5 days/week)', multiplier: 1.55},
+  {value: 'very_active', label: 'Very Active (hard exercise 6-7 days/week)', multiplier: 1.725},
+];
+
+const healthGoals = [
+  {id: 'weight_loss', label: 'Weight Loss'},
+  {id: 'detox', label: 'Detoxification'},
+  {id: 'stress_relief', label: 'Stress Relief'},
+  {id: 'immunity_boosting', label: 'Immunity Boosting'},
+  {id: 'increase_energy', label: 'Increase Energy'},
+] as const;
 
 const resultCategories = [
     { key: 'introduction', title: 'Your Personal Plan', icon: HeartPulse },
@@ -101,14 +114,16 @@ const quickTips = [
 
 
 export default function DietPlannerPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPlan, setIsLoadingPlan] = useState(false);
+  const [isLoadingRemedy, setIsLoadingRemedy] = useState(false);
+  const [remedySuggestion, setRemedySuggestion] = useState<SuggestRemedyOutput | null>(null);
   const [results, setResults] = useState<WellnessPlanOutput & { dailyCalories?: number } | null>(null);
   const [tip, setTip] = useState<string | null>(null);
 
   const {toast} = useToast();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const wellnessPlanForm = useForm<WellnessPlanFormValues>({
+    resolver: zodResolver(wellnessPlanFormSchema),
     defaultValues: {
       age: 25,
       gender: undefined,
@@ -117,19 +132,41 @@ export default function DietPlannerPage() {
     },
   });
 
-  const calculateBMR = (values: FormValues) => {
-    // Mifflin-St Jeor Equation:
-    // BMR = 10 * weight (kg) + 6.25 * height (cm) - 5 * age (y) + s
-    // s is +5 for males and -161 for females
+  const remedyForm = useForm<z.infer<typeof remedyFormSchema>>({
+    resolver: zodResolver(remedyFormSchema),
+  });
+
+  const calculateBMR = (values: WellnessPlanFormValues) => {
     const s = values.gender === 'male' ? 5 : -161;
     const bmr = (10 * values.weight) + (6.25 * values.height) - (5 * values.age) + s;
     const activityMultiplier = lifestyleOptions.find(opt => opt.value === values.lifestyle)?.multiplier || 1.2;
     return Math.round(bmr * activityMultiplier);
   };
 
+  async function onRemedySubmit(values: z.infer<typeof remedyFormSchema>) {
+    setIsLoadingRemedy(true);
+    setRemedySuggestion(null);
+    try {
+      const result = await suggestRemedy(values);
+      if (!result) {
+        throw new Error('Failed to get a suggestion.');
+      }
+      setRemedySuggestion(result);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: 'destructive',
+        title: 'An error occurred',
+        description: 'Failed to get a remedy suggestion. Please try again.',
+      });
+    } finally {
+      setIsLoadingRemedy(false);
+    }
+  }
 
-  async function onSubmit(values: FormValues) {
-    setIsLoading(true);
+
+  async function onWellnessPlanSubmit(values: WellnessPlanFormValues) {
+    setIsLoadingPlan(true);
     setResults(null);
 
     const dailyCalories = calculateBMR(values);
@@ -151,7 +188,7 @@ export default function DietPlannerPage() {
         description: 'Failed to get recommendations. Please try again later.',
       });
     } finally {
-      setIsLoading(false);
+      setIsLoadingPlan(false);
     }
   }
 
@@ -161,8 +198,10 @@ export default function DietPlannerPage() {
   };
 
   const resetForm = () => {
-    form.reset();
+    wellnessPlanForm.reset();
+    remedyForm.reset();
     setResults(null);
+    setRemedySuggestion(null);
   };
 
   return (
@@ -174,31 +213,97 @@ export default function DietPlannerPage() {
             <div className="space-y-8">
               <div className="text-center space-y-2">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline text-primary">
-                  Your Personal Diet Planner
+                  Your Personal Wellness Assistant
                 </h1>
                 <p className="text-muted-foreground text-lg sm:text-xl">
-                  Create your personalized naturopathic wellness plan.
+                  Get AI-powered naturopathic remedies and personalized diet plans.
                 </p>
               </div>
+
+               <Card className="shadow-lg border-t-4 border-primary">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 font-headline text-2xl">
+                    <WandSparkles className="text-primary" /> AI Remedy Finder
+                  </CardTitle>
+                  <CardDescription>
+                    Describe an ailment, and our AI will suggest a natural,
+                    naturopathic remedy.
+                  </CardDescription>
+                </CardHeader>
+                <Form {...remedyForm}>
+                  <form onSubmit={remedyForm.handleSubmit(onRemedySubmit)}>
+                    <CardContent className="space-y-4">
+                      <FormField
+                        control={remedyForm.control}
+                        name="problem"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Textarea
+                              placeholder="e.g., 'I have a persistent dry cough and a sore throat...'"
+                              className="min-h-[100px]"
+                              {...field}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-4">
+                      <Button type="submit" disabled={isLoadingRemedy}>
+                        {isLoadingRemedy ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Finding a Remedy...
+                          </>
+                        ) : (
+                          'Get Remedy Suggestion'
+                        )}
+                      </Button>
+                      
+                      {remedySuggestion && (
+                        <Card className="w-full bg-primary/10 animate-fade-in">
+                            <CardContent className="p-6 space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <Sparkles className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                                    <div>
+                                        <h4 className="font-bold text-lg text-primary-dark">Suggested Remedy</h4>
+                                        <p className="text-muted-foreground">{remedySuggestion.remedy}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <AlertTriangle className="h-5 w-5 text-destructive/80 flex-shrink-0 mt-1" />
+                                    <div>
+                                        <h4 className="font-bold text-lg text-destructive/90">Disclaimer</h4>
+                                        <p className="text-muted-foreground">{remedySuggestion.disclaimer}</p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                      )}
+
+                    </CardFooter>
+                  </form>
+                </Form>
+              </Card>
+
               <Card className="shadow-lg border-t-4 border-primary">
                 <CardHeader>
                   <CardTitle className="text-2xl font-headline">
                     Create Your Wellness Profile
                   </CardTitle>
                   <CardDescription>
-                    Tell us a bit about yourself to get a personalized
-                    naturopathic plan.
+                    For a personalized diet plan, tell us a bit about yourself.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Form {...form}>
+                  <Form {...wellnessPlanForm}>
                     <form
-                      onSubmit={form.handleSubmit(onSubmit)}
+                      onSubmit={wellnessPlanForm.handleSubmit(onWellnessPlanSubmit)}
                       className="space-y-6"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <FormField
-                          control={form.control}
+                          control={wellnessPlanForm.control}
                           name="age"
                           render={({field}) => (
                             <FormItem>
@@ -211,7 +316,7 @@ export default function DietPlannerPage() {
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={wellnessPlanForm.control}
                           name="gender"
                           render={({field}) => (
                             <FormItem>
@@ -235,7 +340,7 @@ export default function DietPlannerPage() {
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={wellnessPlanForm.control}
                           name="height"
                           render={({field}) => (
                             <FormItem>
@@ -248,7 +353,7 @@ export default function DietPlannerPage() {
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={wellnessPlanForm.control}
                           name="weight"
                           render={({field}) => (
                             <FormItem>
@@ -263,7 +368,7 @@ export default function DietPlannerPage() {
                       </div>
 
                       <FormField
-                        control={form.control}
+                        control={wellnessPlanForm.control}
                         name="lifestyle"
                         render={({field}) => (
                           <FormItem>
@@ -291,7 +396,7 @@ export default function DietPlannerPage() {
                       />
 
                       <FormField
-                        control={form.control}
+                        control={wellnessPlanForm.control}
                         name="healthGoals"
                         render={() => (
                           <FormItem>
@@ -305,7 +410,7 @@ export default function DietPlannerPage() {
                               {healthGoals.map(item => (
                                 <FormField
                                   key={item.id}
-                                  control={form.control}
+                                  control={wellnessPlanForm.control}
                                   name="healthGoals"
                                   render={({field}) => {
                                     return (
@@ -347,11 +452,11 @@ export default function DietPlannerPage() {
                       <div className="flex flex-col md:flex-row justify-center items-center gap-4 pt-4">
                         <Button
                             type="submit"
-                            disabled={isLoading}
+                            disabled={isLoadingPlan}
                             className="w-full md:w-1/2"
                             size="lg"
                         >
-                            {isLoading ? (
+                            {isLoadingPlan ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 Generating Your Plan...
