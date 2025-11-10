@@ -21,7 +21,7 @@ export default function ContactPage() {
                             We'd love to hear from you.
                         </p>
                     </div>
-                    <Card>
+                    <Card className="shadow-lg">
                         <CardHeader>
                             <CardTitle>Get in Touch</CardTitle>
                             <CardDescription>

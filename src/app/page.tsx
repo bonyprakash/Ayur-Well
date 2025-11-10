@@ -58,7 +58,7 @@ export default function Home() {
             </p>
             <div className="pt-6">
               <Link href="/diet-planner">
-                  <Button size="lg" className="bg-primary/90 hover:bg-primary text-primary-foreground">Get Started</Button>
+                  <Button size="lg" className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-md hover:shadow-lg transition-shadow">Get Started</Button>
               </Link>
             </div>
           </div>
