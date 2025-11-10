@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "fasting-benefits",
+      "description": "A person looking out a window during sunrise, suggesting contemplation and renewal.",
+      "imageUrl": "https://images.unsplash.com/photo-1757693223749-d5ce2dff34f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzdW5yaXNlJTIwd2luZG93fGVufDB8fHx8MTc2Mjc5OTE0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sunrise window"
+    },
+    {
+      "id": "healthy-gut",
+      "description": "A vibrant bowl of yogurt with fresh berries and nuts, representing gut health.",
+      "imageUrl": "https://images.unsplash.com/photo-1658402218013-18ccf3336bb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx5b2d1cnQlMjBiZXJyaWVzfGVufDB8fHx8MTc2Mjc5OTE0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yogurt berries"
+    },
+    {
+      "id": "detox-foods",
+      "description": "A colorful array of fresh fruits and vegetables like berries, lemons, and leafy greens.",
+      "imageUrl": "https://images.unsplash.com/photo-1635774855717-0aec182f92cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmcnVpdHMlMjB2ZWdldGFibGVzfGVufDB8fHx8MTc2Mjc4Mzg3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fruits vegetables"
+    }
+  ]
 }
