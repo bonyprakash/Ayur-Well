@@ -1,6 +1,6 @@
 'use client';
 
-import {Leaf, Zap, HeartPulse, BrainCircuit, Grape, PersonStanding, Bed} from 'lucide-react';
+import {Leaf, Zap, HeartPulse, BrainCircuit, Grape, PersonStanding, Bed, ArrowDown} from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -41,45 +41,43 @@ export default function Home() {
     <div className="flex min-h-screen w-full flex-col">
       <Header />
       <main className="flex flex-1 flex-col items-center animate-fade-in">
-        <section className="relative w-full h-[50vh] md:h-[70vh] flex items-center justify-center text-center text-white">
-          <Image
-            src="https://picsum.photos/seed/herbs/1800/1000"
-            alt="Fresh herbs and nature background"
-            fill
-            className="object-cover -z-10 brightness-50"
-            data-ai-hint="herbs nature"
-          />
-          <div className="space-y-4 max-w-4xl p-4">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-headline">
-              Live Healthy Through Nature
+         <section className="relative w-full h-[80vh] flex items-center justify-center text-center text-primary-dark bg-gradient-to-br from-green-100 to-green-50">
+          <div className="space-y-6 max-w-4xl p-4 z-10">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline leading-tight">
+              Embrace Nature.
+              <br />
+              <span className="text-primary">Rediscover Wellness.</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-200">
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
               Your AI-powered guide to natural wellness and balanced living.
             </p>
             <div className="pt-6">
               <Link href="/diet-planner">
-                  <Button size="lg" className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-md hover:shadow-lg transition-shadow">Get Started</Button>
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-full px-8 py-6 text-lg">Get Your Personal Plan</Button>
               </Link>
             </div>
           </div>
+          <div className="absolute bottom-10 animate-bounce">
+              <ArrowDown className="w-8 h-8 text-primary/50" />
+          </div>
         </section>
 
-        <section className="w-full max-w-6xl py-16 md:py-24 px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold font-headline">Principles of Naturopathy</h2>
-              <p className="text-muted-foreground mt-2">Embrace a lifestyle that aligns with nature's wisdom.</p>
+        <section id="principles" className="w-full max-w-6xl py-20 md:py-28 px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold font-headline">Principles of Naturopathy</h2>
+              <p className="text-muted-foreground mt-3 text-lg">Embrace a lifestyle that aligns with nature's wisdom.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {awarenessCards.map((feature) => (
-                    <Card key={feature.title} className="shadow-lg hover:shadow-xl hover:-translate-y-2 transition-transform duration-300 border-t-4 border-primary">
+                    <Card key={feature.title} className="shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-300 border-t-4 border-primary bg-card/80 backdrop-blur-sm">
                         <CardHeader className="items-center text-center">
                             <div className={`p-4 rounded-full ${feature.bgColor}`}>
-                                <feature.icon className="w-10 h-10 text-primary" />
+                                <feature.icon className="w-12 h-12 text-primary" />
                             </div>
                             <CardTitle className="font-headline text-2xl pt-4">{feature.title}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-center">
-                            <CardDescription>{feature.description}</CardDescription>
+                            <CardDescription className="text-base">{feature.description}</CardDescription>
                         </CardContent>
                     </Card>
                 ))}

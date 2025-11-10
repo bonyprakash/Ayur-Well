@@ -105,4 +105,16 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
+    
+    .gradient-button {
+        @apply bg-gradient-to-r from-green-400 to-green-600 text-white hover:from-green-500 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-px;
+    }
+
+    .glass-input {
+      @apply bg-white/60 backdrop-blur-sm shadow-sm rounded-xl px-4 py-3 border-white/20;
+    }
+
+    .glassmorphism {
+        @apply bg-card/60 backdrop-blur-sm border;
+    }
 }

@@ -220,7 +220,7 @@ export default function DietPlannerPage() {
                 </p>
               </div>
 
-               <Card className="shadow-lg border-t-4 border-primary">
+               <Card className="shadow-lg border-t-4 border-primary glassmorphism">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 font-headline text-2xl">
                     <WandSparkles className="text-primary" /> Remedy Finder
@@ -240,7 +240,7 @@ export default function DietPlannerPage() {
                           <FormItem>
                             <Textarea
                               placeholder="e.g., 'I have a persistent dry cough and a sore throat...'"
-                              className="min-h-[100px]"
+                              className="min-h-[100px] glass-input"
                               {...field}
                             />
                             <FormMessage />
@@ -249,7 +249,7 @@ export default function DietPlannerPage() {
                       />
                     </CardContent>
                     <CardFooter className="flex-col items-start gap-4">
-                      <Button type="submit" disabled={isLoadingRemedy}>
+                       <Button type="submit" disabled={isLoadingRemedy} className="gradient-button">
                         {isLoadingRemedy ? (
                           <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -286,7 +286,7 @@ export default function DietPlannerPage() {
                 </Form>
               </Card>
 
-              <Card className="shadow-lg border-t-4 border-primary">
+              <Card className="shadow-lg border-t-4 border-primary glassmorphism">
                 <CardHeader>
                   <CardTitle className="text-2xl font-headline">
                     Create Your Wellness Profile
@@ -309,7 +309,7 @@ export default function DietPlannerPage() {
                             <FormItem>
                               <FormLabel>Age</FormLabel>
                               <FormControl>
-                                <Input type="number" placeholder="e.g., 30" {...field} />
+                                <Input type="number" placeholder="e.g., 30" {...field} className="glass-input" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -326,7 +326,7 @@ export default function DietPlannerPage() {
                                 defaultValue={field.value}
                               >
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="glass-input">
                                     <SelectValue placeholder="Select your gender" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -346,7 +346,7 @@ export default function DietPlannerPage() {
                             <FormItem>
                               <FormLabel>Height (cm)</FormLabel>
                               <FormControl>
-                                <Input type="number" placeholder="e.g., 175" {...field} />
+                                <Input type="number" placeholder="e.g., 175" {...field} className="glass-input" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -359,7 +359,7 @@ export default function DietPlannerPage() {
                             <FormItem>
                               <FormLabel>Weight (kg)</FormLabel>
                               <FormControl>
-                                <Input type="number" placeholder="e.g., 70" {...field} />
+                                <Input type="number" placeholder="e.g., 70" {...field} className="glass-input" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -378,7 +378,7 @@ export default function DietPlannerPage() {
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="glass-input">
                                   <SelectValue placeholder="Select your activity level" />
                                 </SelectTrigger>
                               </FormControl>
@@ -416,7 +416,7 @@ export default function DietPlannerPage() {
                                     return (
                                       <FormItem
                                         key={item.id}
-                                        className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                                        className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer bg-white/60"
                                       >
                                         <FormControl>
                                           <Checkbox
@@ -453,7 +453,7 @@ export default function DietPlannerPage() {
                         <Button
                             type="submit"
                             disabled={isLoadingPlan}
-                            className="w-full md:w-1/2"
+                            className="w-full md:w-1/2 gradient-button"
                             size="lg"
                         >
                             {isLoadingPlan ? (
@@ -484,7 +484,7 @@ export default function DietPlannerPage() {
           ) : (
             <div className="space-y-6">
                 {results.dailyCalories && (
-                     <Card className="bg-primary/10 border-primary shadow-lg">
+                     <Card className="bg-white/60 backdrop-blur-sm shadow-lg animate-fade-in">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-3 text-xl font-headline text-primary">
                                 <Flame className="w-6 h-6" />
@@ -492,7 +492,7 @@ export default function DietPlannerPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-4xl font-bold text-center text-primary">{results.dailyCalories} <span className="text-xl font-medium text-muted-foreground">kcal/day</span></p>
+                            <p className="text-5xl font-bold text-center text-primary">{results.dailyCalories} <span className="text-2xl font-medium text-muted-foreground">kcal/day</span></p>
                              <p className="text-center text-sm text-muted-foreground mt-2">This is an estimate for maintaining your current weight. The meal plan below is tailored to your health goals.</p>
                         </CardContent>
                     </Card>
