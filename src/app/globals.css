@@ -7,6 +7,10 @@ body {
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
   :root {
     --background: 125 43% 94%; /* #E8F5E9 */
     --foreground: 20 10% 20%;
@@ -14,7 +18,7 @@ body {
     --card-foreground: 20 10% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 10% 20%;
-    --primary: 120 39% 55%; /* #4CAF50 */
+    --primary: 120 39% 45%; /* Darker #4CAF50 */
     --primary-foreground: 120 25% 98%;
     --secondary: 122 30% 85%;
     --secondary-foreground: 120 25% 25%;
@@ -83,6 +87,26 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+     @apply bg-background text-foreground;
+     background-image: linear-gradient(to bottom right, hsl(var(--background)), hsl(var(--accent) / 0.3));
   }
+}
+
+@layer utilities {
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .animate-fade-in-up {
+        animation: fadeInUp 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 }

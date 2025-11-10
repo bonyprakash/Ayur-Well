@@ -6,9 +6,9 @@ import {cn} from '@/lib/utils';
 import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'NaturaLife',
-  description:
-    'Your personal naturopathic advisor for healthy living and balanced nutrition.',
+  title: 'NaturaLife | Your Guide to Natural Wellness',
+  description: 'Create personalized naturopathic wellness plans, discover herbal remedies, and learn about healthy living. Your AI-powered companion for a balanced life.',
+  keywords: 'naturopathy, wellness, diet planner, herbal remedies, healthy living, natural health',
 };
 
 const alegreya = Alegreya({

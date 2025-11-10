@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header />
-      <main className="flex flex-1 flex-col items-center">
+      <main className="flex flex-1 flex-col items-center animate-fade-in">
         <section className="relative w-full h-[50vh] md:h-[70vh] flex items-center justify-center text-center text-white">
           <Image
             src="https://picsum.photos/seed/herbs/1800/1000"

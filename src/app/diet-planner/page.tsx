@@ -11,6 +11,8 @@ import {
   Soup,
   Flame,
   PersonStanding,
+  Lightbulb,
+  X,
 } from 'lucide-react';
 
 import {
@@ -89,10 +91,19 @@ const resultCategories = [
     { key: 'wellnessPractices', title: 'Wellness Practices', icon: PersonStanding },
 ] as const;
 
+const quickTips = [
+    'Start your day with lukewarm lemon water to kickstart your metabolism.',
+    'Avoid eating heavy meals after sunset to improve digestion.',
+    'Incorporate 30 minutes of mindful walking into your daily routine.',
+    'Try to drink at least 8 glasses of water throughout the day.',
+    'Chew your food thoroughly to aid digestion and nutrient absorption.',
+];
+
 
 export default function DietPlannerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<WellnessPlanOutput & { dailyCalories?: number } | null>(null);
+  const [tip, setTip] = useState<string | null>(null);
 
   const {toast} = useToast();
 
@@ -144,6 +155,11 @@ export default function DietPlannerPage() {
     }
   }
 
+  const showRandomTip = () => {
+    const randomIndex = Math.floor(Math.random() * quickTips.length);
+    setTip(quickTips[randomIndex]);
+  };
+
   const resetForm = () => {
     form.reset();
     setResults(null);
@@ -152,7 +168,7 @@ export default function DietPlannerPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8">
+      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-4xl">
           {!results ? (
             <div className="space-y-8">
@@ -328,7 +344,7 @@ export default function DietPlannerPage() {
                         )}
                       />
 
-                      <div className="flex justify-center pt-4">
+                      <div className="flex flex-col md:flex-row justify-center items-center gap-4 pt-4">
                         <Button
                             type="submit"
                             disabled={isLoading}
@@ -343,6 +359,16 @@ export default function DietPlannerPage() {
                             ) : (
                             'Get My Wellness Plan'
                             )}
+                        </Button>
+                         <Button
+                            type="button"
+                            variant="outline"
+                            onClick={showRandomTip}
+                            className="w-full md:w-auto"
+                            size="lg"
+                        >
+                            <Lightbulb className="mr-2 h-4 w-4" />
+                            Get a Quick Tip
                         </Button>
                       </div>
                     </form>
@@ -375,6 +401,24 @@ export default function DietPlannerPage() {
           )}
         </div>
       </main>
+
+       {tip && (
+        <div className="fixed bottom-6 right-6 w-80 animate-fade-in-up">
+            <Card className="bg-accent/90 backdrop-blur-sm border-primary shadow-2xl">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-base font-headline text-accent-foreground">
+                        Naturopathic Tip
+                    </CardTitle>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setTip(null)}>
+                        <X className="h-4 w-4" />
+                    </Button>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-accent-foreground">{tip}</p>
+                </CardContent>
+            </Card>
+        </div>
+      )}
     </div>
   );
 }
