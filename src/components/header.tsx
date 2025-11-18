@@ -26,11 +26,11 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm border-black/5">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center gap-2">
           <Logo />
-          <span className="hidden font-bold text-xl sm:inline-block">
+          <span className="hidden font-bold text-xl sm:inline-block" style={{color: '#245C47'}}>
             NaturaLife
           </span>
         </Link>
@@ -65,7 +65,7 @@ export function Header() {
               <nav className="grid gap-6 text-lg font-medium mt-8">
                  <Link href="/" className="flex items-center gap-2 text-lg font-semibold" onClick={() => setIsMobileMenuOpen(false)}>
                     <Logo />
-                    <span className="font-bold text-xl">NaturaLife</span>
+                    <span className="font-bold text-xl" style={{color: '#245C47'}}>NaturaLife</span>
                 </Link>
                 {navLinks.map(link => (
                   <Link
