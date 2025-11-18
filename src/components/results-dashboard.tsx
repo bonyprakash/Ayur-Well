@@ -61,7 +61,7 @@ export function ResultsDashboard({
                  <Card key={category.key} className="shadow-lg">
                     <CardHeader className="flex flex-row items-center space-x-3 space-y-0">
                         <Icon className="w-6 h-6 text-primary" />
-                        <CardTitle className="text-2xl font-headline">{category.title}</CardTitle>
+                        <CardTitle className="text-2xl">{category.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="text-base space-y-2 pl-12">
                         {listItems.length > 1 ? (

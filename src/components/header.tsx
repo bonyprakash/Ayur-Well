@@ -29,21 +29,21 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center gap-2">
-          <Logo className="h-8 w-8" />
-          <span className="hidden font-bold font-headline text-xl sm:inline-block">
-            AyurWell
+          <Logo />
+          <span className="hidden font-bold text-xl sm:inline-block">
+            NaturaLife
           </span>
         </Link>
         
         <nav className="hidden md:flex flex-1 items-center justify-center">
-          <ul className="flex items-center space-x-6">
+          <ul className="flex items-center space-x-8">
             {navLinks.map(link => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   className={cn(
                     'text-sm font-medium transition-colors hover:text-primary',
-                    pathname === link.href ? 'text-primary font-bold' : 'text-muted-foreground'
+                    pathname === link.href ? 'text-primary font-semibold' : 'text-muted-foreground'
                   )}
                 >
                   {link.label}
@@ -64,8 +64,8 @@ export function Header() {
             <SheetContent side="left" className="w-full max-w-xs">
               <nav className="grid gap-6 text-lg font-medium mt-8">
                  <Link href="/" className="flex items-center gap-2 text-lg font-semibold" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Logo className="h-8 w-8" />
-                    <span className="font-bold font-headline text-xl">AyurWell</span>
+                    <Logo />
+                    <span className="font-bold text-xl">NaturaLife</span>
                 </Link>
                 {navLinks.map(link => (
                   <Link

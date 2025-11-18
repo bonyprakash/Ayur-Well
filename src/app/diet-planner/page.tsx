@@ -207,12 +207,12 @@ export default function DietPlannerPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in-up">
+      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-4xl">
           {!results ? (
             <div className="space-y-8">
               <div className="text-center space-y-2">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline text-primary">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">
                   Your Personal Wellness Assistant
                 </h1>
                 <p className="text-muted-foreground text-lg sm:text-xl">
@@ -222,7 +222,7 @@ export default function DietPlannerPage() {
 
                <Card className="shadow-lg border-t-4 border-primary glassmorphism">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3 font-headline text-2xl">
+                  <CardTitle className="flex items-center gap-3 text-2xl">
                     <WandSparkles className="text-primary" /> Remedy Finder
                   </CardTitle>
                   <CardDescription>
@@ -288,7 +288,7 @@ export default function DietPlannerPage() {
 
               <Card className="shadow-lg border-t-4 border-primary glassmorphism">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-headline">
+                  <CardTitle className="text-2xl">
                     Create Your Wellness Profile
                   </CardTitle>
                   <CardDescription>
@@ -486,7 +486,7 @@ export default function DietPlannerPage() {
                 {results.dailyCalories && (
                      <Card className="bg-white/60 backdrop-blur-sm shadow-lg animate-fade-in">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-3 text-xl font-headline text-primary">
+                            <CardTitle className="flex items-center gap-3 text-xl font-semibold text-primary">
                                 <Flame className="w-6 h-6" />
                                 Estimated Daily Calorie Needs
                             </CardTitle>
@@ -511,7 +511,7 @@ export default function DietPlannerPage() {
         <div className="fixed bottom-6 right-6 w-80 animate-fade-in-up">
             <Card className="bg-accent/90 backdrop-blur-sm border-primary shadow-2xl">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-base font-headline text-accent-foreground">
+                    <CardTitle className="text-base font-semibold text-accent-foreground">
                         Naturopathic Tip
                     </CardTitle>
                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setTip(null)}>

@@ -11,21 +11,21 @@ export function Footer() {
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
   }, []);
-  
+
   return (
-    <footer className="bg-secondary/50 text-foreground border-t">
+    <footer className="bg-card text-card-foreground border-t">
       <div className="container py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center">
-            <Logo className="h-8 w-8 mr-2" />
-            <span className="font-bold font-headline text-2xl text-primary">AyurWell</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          <div className="flex items-center justify-center md:justify-start">
+            <Logo />
+            <span className="font-bold text-2xl ml-2">NaturaLife</span>
           </div>
-          <div className="text-center md:text-left">
-            <p className="text-lg italic text-muted-foreground">
-              "Health is a state of complete harmony of the body, mind, and spirit."
+          <div className="text-center text-muted-foreground">
+            <p className="text-lg italic">
+              "The greatest wealth is health."
             </p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center md:justify-end space-x-4">
             <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
               <Twitter className="h-6 w-6" />
               <span className="sr-only">Twitter</span>
@@ -41,7 +41,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
-          {currentYear && <p>Copyright © {currentYear} AyurWell. All Rights Reserved.</p>}
+          {currentYear !== null && <p>NaturaLife © {currentYear}</p>}
         </div>
       </div>
     </footer>

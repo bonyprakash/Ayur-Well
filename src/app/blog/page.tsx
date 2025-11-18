@@ -82,11 +82,11 @@ export default function BlogPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in-up">
+      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-5xl space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline">
-              AyurWell Insights
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+              NaturaLife Insights
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl">
               Knowledge and inspiration for your wellness journey.
@@ -96,7 +96,7 @@ export default function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
               <Dialog key={post.id}>
-                <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl">
                   {post.image && (
                     <div className="relative h-48 w-full">
                       <Image
@@ -109,7 +109,7 @@ export default function BlogPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <CardTitle className="font-headline text-xl">
+                    <CardTitle className="text-xl">
                       {post.title}
                     </CardTitle>
                     <CardDescription className="text-base pt-2">
@@ -125,7 +125,7 @@ export default function BlogPage() {
 
                 <DialogContent className="max-w-3xl">
                   <DialogHeader>
-                    <DialogTitle className="text-2xl font-headline">
+                    <DialogTitle className="text-2xl">
                       {post.title}
                     </DialogTitle>
                      <DialogDescription asChild>

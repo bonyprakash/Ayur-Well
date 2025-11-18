@@ -6,67 +6,70 @@
   html {
     @apply scroll-smooth;
   }
-  
+  body {
+    @apply bg-background text-foreground;
+    background-image: linear-gradient(to bottom right, hsl(var(--background)), hsl(120 39% 92% / 0.5));
+  }
   :root {
-    --background: 40 33% 96%; /* Soft Beige */
+    --background: 120 39% 96%; /* Soft, light green */
     --foreground: 20 14% 10%;
-    
-    --card: 40 33% 98%;
+
+    --card: 0 0% 100%;
     --card-foreground: 20 14% 10%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 20 10% 20%;
 
-    --primary: 26 52% 52%; /* Earthy Orange */
-    --primary-foreground: 30 100% 98%;
+    --primary: 140 42% 45%; /* Natural Green */
+    --primary-foreground: 140 25% 98%;
     
-    --secondary: 40 33% 90%;
-    --secondary-foreground: 26 52% 30%;
+    --secondary: 130 30% 94%;
+    --secondary-foreground: 140 42% 25%;
     
-    --muted: 40 33% 92%;
+    --muted: 120 30% 95%;
     --muted-foreground: 20 10% 45%;
     
-    --accent: 120 27% 65%; /* Muted Green */
-    --accent-foreground: 120 25% 25%;
+    --accent: 150 45% 55%; /* Vibrant Leaf Green */
+    --accent-foreground: 150 30% 20%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 40 20% 88%;
-    --input: 40 20% 92%;
-    --ring: 26 52% 52%;
+    --border: 120 20% 88%;
+    --input: 0 0% 100%;
+    --ring: 140 42% 45%;
     
     --radius: 0.75rem;
   }
   
   .dark {
-    --background: 20 14% 8%;
-    --foreground: 40 5% 95%;
+    --background: 140 10% 8%;
+    --foreground: 120 5% 95%;
 
-    --card: 20 14% 10%;
-    --card-foreground: 40 5% 95%;
+    --card: 140 10% 10%;
+    --card-foreground: 120 5% 95%;
 
-    --popover: 20 14% 8%;
-    --popover-foreground: 40 5% 95%;
+    --popover: 140 10% 8%;
+    --popover-foreground: 120 5% 95%;
 
-    --primary: 26 52% 58%;
-    --primary-foreground: 30 100% 98%;
+    --primary: 140 42% 55%;
+    --primary-foreground: 140 25% 98%;
 
-    --secondary: 20 14% 15%;
-    --secondary-foreground: 40 5% 95%;
+    --secondary: 140 10% 15%;
+    --secondary-foreground: 120 5% 95%;
 
-    --muted: 20 14% 18%;
-    --muted-foreground: 40 5% 65%;
+    --muted: 140 10% 18%;
+    --muted-foreground: 120 5% 65%;
 
-    --accent: 120 27% 55%;
-    --accent-foreground: 120 25% 95%;
+    --accent: 150 45% 45%;
+    --accent-foreground: 150 25% 95%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 20 14% 20%;
-    --input: 20 14% 20%;
-    --ring: 26 52% 58%;
+    --border: 140 10% 20%;
+    --input: 140 10% 15%;
+    --ring: 140 42% 55%;
   }
 }
 
@@ -74,14 +77,46 @@
   * {
     @apply border-border;
   }
-  body {
-     @apply bg-background text-foreground;
-  }
 }
 
 @layer utilities {
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
     .animate-fade-in-up {
         animation: fadeInUp 0.7s ease-in-out;
+    }
+    
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-input {
+      background: rgba(255, 255, 255, 0.7) !important;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+    }
+    
+    .gradient-button {
+      background-image: linear-gradient(to right, hsl(var(--primary) / 0.9), hsl(var(--accent) / 0.9));
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px 0 rgba(10, 126, 88, 0.25);
+    }
+    
+    .gradient-button:hover {
+      background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+      box-shadow: 0 6px 20px 0 rgba(10, 126, 88, 0.35);
+    }
+
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
     @keyframes fadeInUp {

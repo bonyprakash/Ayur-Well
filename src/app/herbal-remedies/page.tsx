@@ -74,10 +74,10 @@ export default function HerbalRemediesPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in-up">
+      <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-5xl space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
               Guide to Herbal Remedies
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl mx-auto">
@@ -89,13 +89,13 @@ export default function HerbalRemediesPage() {
             {remedies.map(remedy => (
               <Card
                 key={remedy.name}
-                className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+                className="overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl"
               >
                 <div className="relative h-48 w-full">
                     <Image src={remedy.image} alt={remedy.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint={remedy.hint} />
                 </div>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3 font-headline text-2xl">
+                  <CardTitle className="flex items-center gap-3 text-2xl">
                     <Leaf className="text-primary" /> {remedy.name}
                   </CardTitle>
                   <CardDescription className="pt-1 text-base">
