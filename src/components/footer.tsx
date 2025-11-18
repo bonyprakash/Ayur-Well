@@ -13,16 +13,16 @@ export function Footer() {
   }, []);
   
   return (
-    <footer className="bg-card text-card-foreground border-t">
+    <footer className="bg-secondary/50 text-foreground border-t">
       <div className="container py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center">
             <Logo className="h-8 w-8 mr-2" />
-            <span className="font-bold font-headline text-2xl">NaturaLife</span>
+            <span className="font-bold font-headline text-2xl text-primary">AyurWell</span>
           </div>
           <div className="text-center md:text-left">
             <p className="text-lg italic text-muted-foreground">
-              "The greatest medicine of all is to teach people how not to need it."
+              "Health is a state of complete harmony of the body, mind, and spirit."
             </p>
           </div>
           <div className="flex items-center space-x-4">
@@ -41,7 +41,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
-          {currentYear && <p>NaturaLife © {currentYear}</p>}
+          {currentYear && <p>Copyright © {currentYear} AyurWell. All Rights Reserved.</p>}
         </div>
       </div>
     </footer>

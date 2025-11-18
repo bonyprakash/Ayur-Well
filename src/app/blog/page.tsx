@@ -80,30 +80,30 @@ const blogPosts = [
 
 export default function BlogPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
       <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in-up">
         <div className="w-full max-w-5xl space-y-8">
           <div className="text-center space-y-2">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-headline">
-              NaturaLife Blog
+              AyurWell Insights
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl">
-              Insights and articles on natural wellness.
+              Knowledge and inspiration for your wellness journey.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
               <Dialog key={post.id}>
-                <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
                   {post.image && (
                     <div className="relative h-48 w-full">
                       <Image
                         src={post.image.imageUrl}
                         alt={post.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                         data-ai-hint={post.image.imageHint}
                       />
                     </div>
@@ -116,7 +116,7 @@ export default function BlogPage() {
                       {post.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardFooter className="mt-auto">
+                  <CardFooter className="mt-auto pt-4">
                     <DialogTrigger asChild>
                       <Button variant="outline">Read More</Button>
                     </DialogTrigger>
