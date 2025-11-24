@@ -11,7 +11,7 @@ export function IntroAnimation({ onAnimationComplete }: IntroAnimationProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onAnimationComplete();
-    }, 2000); // Corresponds to the animation duration
+    }, 2500); // Corresponds to the animation duration
 
     return () => clearTimeout(timer);
   }, [onAnimationComplete]);
@@ -24,8 +24,21 @@ export function IntroAnimation({ onAnimationComplete }: IntroAnimationProps) {
           <meta name="keywords" content="ayurveda, naturopathy, wellness, dosha, vata, pitta, kapha, herbal remedies, yoga" />
       </head>
       <body>
-        <div className="flex h-screen w-full items-center justify-center bg-background intro-screen">
-          <div className="flex flex-col items-center gap-4 intro-content">
+        <div className="intro-leaf-screen">
+          <div className="leaves-container">
+            {/* Generating 10 leaves for a fuller effect */}
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
+          </div>
+          <div className="intro-leaf-content">
             <Logo />
             <span className="font-bold text-2xl" style={{ color: '#245C47' }}>
               NaturaLife

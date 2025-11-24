@@ -22,12 +22,17 @@ export default function RootLayout({
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    // Hide the intro animation after a short delay
-    const timer = setTimeout(() => {
+    // Using sessionStorage to ensure animation only runs once per session
+    if (sessionStorage.getItem('introShown')) {
       setShowIntro(false);
-    }, 2000); // Animation duration + a little extra
+    } else {
+      const timer = setTimeout(() => {
+        setShowIntro(false);
+        sessionStorage.setItem('introShown', 'true');
+      }, 3000); // Total duration of the intro
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   if (showIntro) {
