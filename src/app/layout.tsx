@@ -24,27 +24,21 @@ export default function RootLayout({
 
   useEffect(() => {
     setIsClient(true);
-    // Using sessionStorage to ensure animation only runs once per session
     if (sessionStorage.getItem('introShown')) {
       setShowIntro(false);
     } else {
       const timer = setTimeout(() => {
         setShowIntro(false);
         sessionStorage.setItem('introShown', 'true');
-      }, 3000); // Animation duration + fade out
+      }, 3500); // Corresponds to animation duration + fade out
 
       return () => clearTimeout(timer);
     }
   }, []);
 
-  if (isClient && showIntro) {
-    return (
-        <html lang="en" suppressHydrationWarning>
-            <body>
-                <IntroAnimation />
-            </body>
-        </html>
-    )
+  // While waiting for the client to mount, we can render nothing or a basic loader
+  if (!isClient) {
+    return null;
   }
   
   return (
@@ -60,6 +54,7 @@ export default function RootLayout({
           inter.variable
         )}
       >
+        {showIntro && <IntroAnimation />}
         <div className="flex-grow animate-fade-in">
             {children}
         </div>

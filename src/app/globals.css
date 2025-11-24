@@ -150,91 +150,100 @@
     }
     
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; visibility: hidden; }
-    }
-    
-    /* New Leaf Wave Intro Animation */
-    .intro-leaf-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--background)) 100%);
-      overflow: hidden;
-      animation: fadeOut 0.8s ease-in-out 2.5s forwards;
-    }
-
-    .leaves-container {
-      position: absolute;
-      top: 0;
-      left: -100px;
-      width: calc(100% + 200px);
-      height: 100%;
-      pointer-events: none;
-    }
-
-    .leaf {
-      position: absolute;
-      width: 40px;
-      height: 20px;
-      background-color: hsla(var(--primary), 0.6);
-      border-radius: 50%;
-      opacity: 0;
-      animation: leafWave 3s ease-in-out forwards;
-    }
-    
-    .intro-leaf-title {
-        opacity: 0;
-        animation: fadeIn 1.2s ease-out 0.2s forwards, breathe 3s ease-in-out 1s infinite;
-        z-index: 10;
-    }
-
-    @keyframes leafWave {
-        0% {
-            transform: translateX(-50px) translateY(50vh) rotate(0deg) scale(0.9);
-            opacity: 0;
-        }
-        25% {
-            transform: translateX(30vw) translateY(calc(50vh - 80px)) rotate(20deg);
-            opacity: 0.9;
-        }
-        50% {
-            transform: translateX(60vw) translateY(calc(50vh + 20px)) rotate(-15deg);
-        }
-        75% {
-            transform: translateX(90vw) translateY(calc(50vh - 40px)) rotate(10deg);
-        }
-        100% {
-            transform: translateX(calc(100vw + 50px)) translateY(50vh) rotate(0deg) scale(1.1);
-            opacity: 0;
-        }
-    }
-
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px hsla(var(--primary), 0.2)); }
-      50% { transform: scale(1.04); filter: drop-shadow(0 0 12px hsla(var(--primary), 0.4)); }
-    }
-
-    /* Staggered leaf animations */
-    .leaf:nth-child(1) { top: 20%; animation-duration: 3.1s; animation-delay: 0s; width: 25px; height: 12px; background-color: hsla(var(--secondary), 0.7); }
-    .leaf:nth-child(2) { top: 35%; animation-duration: 2.8s; animation-delay: 0.2s; width: 40px; height: 20px; background-color: hsla(var(--primary), 0.6); }
-    .leaf:nth-child(3) { top: 50%; animation-duration: 3.3s; animation-delay: 0.4s; width: 30px; height: 15px; background-color: hsla(var(--secondary), 0.8); }
-    .leaf:nth-child(4) { top: 65%; animation-duration: 2.9s; animation-delay: 0.6s; width: 35px; height: 18px; background-color: hsla(var(--primary), 0.5); }
-    .leaf:nth-child(5) { top: 40%; animation-duration: 3.0s; animation-delay: 0.8s; width: 22px; height: 11px; background-color: hsla(var(--secondary), 0.6); }
-    .leaf:nth-child(6) { top: 75%; animation-duration: 3.2s; animation-delay: 1.0s; width: 45px; height: 22px; background-color: hsla(var(--primary), 0.7); }
-    .leaf:nth-child(7) { top: 15%; animation-duration: 2.7s; animation-delay: 1.2s; width: 28px; height: 14px; background-color: hsla(var(--secondary), 0.7); }
-    .leaf:nth-child(8) { top: 85%; animation-duration: 3.4s; animation-delay: 1.4s; width: 32px; height: 16px; background-color: hsla(var(--primary), 0.6); }
 }
+
+/* New Intro Animation Styles */
+#introScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e8f5e9, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 9999;
+  animation: fadeOutIntro 1s ease 2.5s forwards;
+}
+
+.intro-content {
+  z-index: 2;
+}
+
+.intro-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2e7d32;
+  animation: fadeIn 1.2s ease-out 0.2s forwards, breathe 3s ease-in-out 1s infinite;
+  opacity: 0;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.leaf-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.leaf {
+  width: 40px;
+  height: 20px;
+  background: #66bb6a;
+  border-radius: 50%;
+  position: absolute;
+  animation: leafWave 3s ease-in-out forwards;
+  opacity: 0;
+}
+
+@keyframes leafWave {
+  0% {
+    transform: translateX(-100px) translateY(50vh) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  25% {
+    transform: translateX(30vw) translateY(calc(50vh - 80px)) rotate(20deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(60vw) translateY(calc(50vh + 20px)) rotate(-15deg);
+  }
+  75% {
+    transform: translateX(90vw) translateY(calc(50vh - 40px)) rotate(10deg);
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(50vh) rotate(0deg) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOutIntro {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.leaf:nth-child(1) { top: 20%; animation-duration: 3.1s; animation-delay: 0s; width: 25px; height: 12px; background: #a5d6a7; }
+.leaf:nth-child(2) { top: 35%; animation-duration: 2.8s; animation-delay: 0.2s; width: 40px; height: 20px; background: #81c784; }
+.leaf:nth-child(3) { top: 50%; animation-duration: 3.3s; animation-delay: 0.4s; width: 30px; height: 15px; background: #4caf50; }
+.leaf:nth-child(4) { top: 65%; animation-duration: 2.9s; animation-delay: 0.6s; width: 35px; height: 18px; background: #a5d6a7; }
+.leaf:nth-child(5) { top: 40%; animation-duration: 3.0s; animation-delay: 0.8s; width: 22px; height: 11px; background: #66bb6a; }
+.leaf:nth-child(6) { top: 75%; animation-duration: 3.2s; animation-delay: 1.0s; width: 45px; height: 22px; background: #81c784; }
