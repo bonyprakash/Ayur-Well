@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,6 +9,13 @@ import {
   DialogTrigger,
   DialogDescription,
 } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Header } from '@/components/header';
 import {
@@ -20,8 +28,11 @@ import {
 } from '@/components/ui/card';
 import Image from 'next/image';
 import { placeholderImages } from '@/lib/placeholder-images';
+import { translateContent } from '@/ai/flows/translate-content';
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-const blogPosts = [
+const originalBlogPosts = [
   {
     id: 'fasting-power',
     title: 'The Power of Fasting in Naturopathy',
@@ -78,67 +89,150 @@ const blogPosts = [
   },
 ];
 
+type BlogPost = typeof originalBlogPosts[0];
+
+const languages = [
+  { value: 'en', label: 'English' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'fr', label: 'French' },
+  { value: 'de', label: 'German' },
+  { value: 'hi', label: 'Hindi' },
+  { value: 'ja', label: 'Japanese' },
+];
+
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(originalBlogPosts);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const { toast } = useToast();
+
+  const handleLanguageChange = async (languageCode: string) => {
+    if (languageCode === selectedLanguage) return;
+    
+    setSelectedLanguage(languageCode);
+
+    if (languageCode === 'en') {
+      setBlogPosts(originalBlogPosts);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      const language = languages.find(l => l.value === languageCode)?.label || 'English';
+      
+      const translatedPosts = await Promise.all(
+        originalBlogPosts.map(async (post) => {
+          const [translatedTitle, translatedDescription, translatedContent] = await Promise.all([
+            translateContent({ content: post.title, targetLanguage: language }),
+            translateContent({ content: post.description, targetLanguage: language }),
+            translateContent({ content: post.content, targetLanguage: language }),
+          ]);
+          return {
+            ...post,
+            title: translatedTitle.translatedText,
+            description: translatedDescription.translatedText,
+            content: translatedContent.translatedText,
+          };
+        })
+      );
+      setBlogPosts(translatedPosts);
+    } catch (error) {
+      console.error("Translation failed:", error);
+      toast({
+        variant: 'destructive',
+        title: 'Translation Failed',
+        description: 'Could not translate the content. Please try again.',
+      });
+      // Revert to English on failure
+      setBlogPosts(originalBlogPosts);
+      setSelectedLanguage('en');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
       <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-5xl space-y-8">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
               NaturaLife Insights
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl">
               Knowledge and inspiration for your wellness journey.
             </p>
+            <div className="flex justify-center">
+               <div className="w-full max-w-[200px]">
+                 <Select onValueChange={handleLanguageChange} defaultValue="en">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map(lang => (
+                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+               </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <Dialog key={post.id}>
-                <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl">
-                  {post.image && (
-                    <div className="relative h-48 w-full">
-                      <Image
-                        src={post.image.imageUrl}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-ai-hint={post.image.imageHint}
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <CardTitle className="text-xl">
-                      {post.title}
-                    </CardTitle>
-                    <CardDescription className="text-base pt-2">
-                      {post.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardFooter className="mt-auto pt-4">
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Read More</Button>
-                    </DialogTrigger>
-                  </CardFooter>
-                </Card>
+          {isTranslating ? (
+             <div className="flex flex-col items-center justify-center space-y-4 h-96">
+                <Loader2 className="w-12 h-12 animate-spin text-primary" />
+                <p className="text-muted-foreground">Translating content...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogPosts.map((post) => (
+                <Dialog key={post.id}>
+                  <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl">
+                    {post.image && (
+                      <div className="relative h-48 w-full">
+                        <Image
+                          src={post.image.imageUrl}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          data-ai-hint={post.image.imageHint}
+                        />
+                      </div>
+                    )}
+                    <CardHeader>
+                      <CardTitle className="text-xl">
+                        {post.title}
+                      </CardTitle>
+                      <CardDescription className="text-base pt-2">
+                        {post.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardFooter className="mt-auto pt-4">
+                      <DialogTrigger asChild>
+                        <Button variant="outline">Read More</Button>
+                      </DialogTrigger>
+                    </CardFooter>
+                  </Card>
 
-                <DialogContent className="max-w-3xl">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl">
-                      {post.title}
-                    </DialogTitle>
-                     <DialogDescription asChild>
-                       <div
-                        className="prose prose-sm sm:prose-base max-w-none text-muted-foreground pt-4"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                      />
-                     </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            ))}
-          </div>
+                  <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        {post.title}
+                      </DialogTitle>
+                      <DialogDescription asChild>
+                        <div
+                          className="prose prose-sm sm:prose-base max-w-none text-muted-foreground pt-4"
+                          dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>

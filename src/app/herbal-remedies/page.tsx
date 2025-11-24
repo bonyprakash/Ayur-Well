@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -13,11 +14,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Leaf, AlertTriangle } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Leaf, AlertTriangle, Loader2 } from 'lucide-react';
 import { Header } from '@/components/header';
 import Image from 'next/image';
+import { translateContent } from '@/ai/flows/translate-content';
+import { useToast } from '@/hooks/use-toast';
 
-const remedies = [
+const originalRemedies = [
   {
     name: 'Tulsi (Holy Basil)',
     benefit: 'Reduces stress and boosts immunity.',
@@ -68,69 +78,150 @@ const remedies = [
   },
 ];
 
+type Remedy = typeof originalRemedies[0];
+
+const languages = [
+  { value: 'en', label: 'English' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'fr', label: 'French' },
+  { value: 'de', label: 'German' },
+  { value: 'hi', label: 'Hindi' },
+  { value: 'ja', label: 'Japanese' },
+];
 
 export default function HerbalRemediesPage() {
+  const [remedies, setRemedies] = useState<Remedy[]>(originalRemedies);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const { toast } = useToast();
+
+  const handleLanguageChange = async (languageCode: string) => {
+    if (languageCode === selectedLanguage) return;
+    
+    setSelectedLanguage(languageCode);
+
+    if (languageCode === 'en') {
+      setRemedies(originalRemedies);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      const language = languages.find(l => l.value === languageCode)?.label || 'English';
+      
+      const translatedRemedies = await Promise.all(
+        originalRemedies.map(async (remedy) => {
+          const [translatedName, translatedBenefit, translatedUsage, translatedPrecautions] = await Promise.all([
+            translateContent({ content: remedy.name, targetLanguage: language }),
+            translateContent({ content: remedy.benefit, targetLanguage: language }),
+            translateContent({ content: remedy.usage, targetLanguage: language }),
+            translateContent({ content: remedy.precautions, targetLanguage: language }),
+          ]);
+          return {
+            ...remedy,
+            name: translatedName.translatedText,
+            benefit: translatedBenefit.translatedText,
+            usage: translatedUsage.translatedText,
+            precautions: translatedPrecautions.translatedText,
+          };
+        })
+      );
+      setRemedies(translatedRemedies);
+    } catch (error) {
+      console.error("Translation failed:", error);
+      toast({
+        variant: 'destructive',
+        title: 'Translation Failed',
+        description: 'Could not translate the content. Please try again.',
+      });
+      setRemedies(originalRemedies);
+      setSelectedLanguage('en');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
   
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
       <main className="flex flex-1 flex-col items-center p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="w-full max-w-5xl space-y-8">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
               Guide to Herbal Remedies
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl mx-auto">
               Explore nature's pharmacy. This guide offers insights into common Ayurvedic herbs for wellness.
             </p>
+            <div className="flex justify-center">
+               <div className="w-full max-w-[200px]">
+                 <Select onValueChange={handleLanguageChange} defaultValue="en">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map(lang => (
+                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+               </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {remedies.map(remedy => (
-              <Card
-                key={remedy.name}
-                className="overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl"
-              >
-                <div className="relative h-48 w-full">
-                    <Image src={remedy.image} alt={remedy.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint={remedy.hint} />
-                </div>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-2xl">
-                    <Leaf className="text-primary" /> {remedy.name}
-                  </CardTitle>
-                  <CardDescription className="pt-1 text-base">
-                    {remedy.benefit}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="item-1">
-                      <AccordionTrigger>Details</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-semibold">How to Use</h4>
-                            <p className="text-muted-foreground text-sm">
-                              {remedy.usage}
-                            </p>
+          {isTranslating ? (
+             <div className="flex flex-col items-center justify-center space-y-4 h-96">
+                <Loader2 className="w-12 h-12 animate-spin text-primary" />
+                <p className="text-muted-foreground">Translating content...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {remedies.map(remedy => (
+                <Card
+                  key={remedy.name}
+                  className="overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl"
+                >
+                  <div className="relative h-48 w-full">
+                      <Image src={remedy.image} alt={remedy.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint={remedy.hint} />
+                  </div>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <Leaf className="text-primary" /> {remedy.name}
+                    </CardTitle>
+                    <CardDescription className="pt-1 text-base">
+                      {remedy.benefit}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>Details</AccordionTrigger>
+                        <AccordionContent>
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold">How to Use</h4>
+                              <p className="text-muted-foreground text-sm">
+                                {remedy.usage}
+                              </p>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold flex items-center gap-2 text-destructive/90">
+                                <AlertTriangle className="w-4 h-4" />
+                                Precautions
+                              </h4>
+                              <p className="text-muted-foreground text-sm">
+                                {remedy.precautions}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold flex items-center gap-2 text-destructive/90">
-                              <AlertTriangle className="w-4 h-4" />
-                              Precautions
-                            </h4>
-                            <p className="text-muted-foreground text-sm">
-                              {remedy.precautions}
-                            </p>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -5,5 +5,6 @@ config(); // Load environment variables
 // Import flows to register them with Genkit
 import '@/ai/flows/wellness-plan.ts';
 import '@/ai/flows/suggest-remedy.ts';
+import '@/ai/flows/translate-content.ts';
 
 // Triggering a reload to pick up environment variables.
