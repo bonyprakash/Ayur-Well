@@ -117,7 +117,7 @@
     .gradient-button:hover {
       background-image: linear-gradient(to right, #69d88a, #4CAF68);
       box-shadow: 0 6px 20px 0 rgba(76, 175, 104, 0.3);
-      transform: translateY(-2px);
+      transform: scale(1.03);
     }
 
     .vignette {

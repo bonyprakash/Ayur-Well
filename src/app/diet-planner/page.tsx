@@ -237,7 +237,7 @@ export default function DietPlannerPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex-1 p-4 sm:p-6 md:p-8">
+      <main className="flex-1 p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="mx-auto w-full max-w-7xl space-y-8">
             <div className="text-center space-y-2">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
