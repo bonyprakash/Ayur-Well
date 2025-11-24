@@ -20,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [showIntro, setShowIntro] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     // Using sessionStorage to ensure animation only runs once per session
     if (sessionStorage.getItem('introShown')) {
       setShowIntro(false);
@@ -35,8 +37,8 @@ export default function RootLayout({
     }
   }, []);
 
-  if (showIntro) {
-    return <IntroAnimation onAnimationComplete={() => setShowIntro(false)} />;
+  if (isClient && showIntro) {
+    return <IntroAnimation />;
   }
   
   return (
