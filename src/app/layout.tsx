@@ -36,11 +36,6 @@ export default function RootLayout({
     }
   }, []);
 
-  // While waiting for the client to mount, we can render nothing or a basic loader
-  if (!isClient) {
-    return null;
-  }
-  
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -54,7 +49,7 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        {showIntro && <IntroAnimation />}
+        {isClient && showIntro && <IntroAnimation />}
         <div className="flex-grow animate-fade-in">
             {children}
         </div>
