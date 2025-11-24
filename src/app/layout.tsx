@@ -38,7 +38,13 @@ export default function RootLayout({
   }, []);
 
   if (isClient && showIntro) {
-    return <IntroAnimation />;
+    return (
+        <html lang="en" suppressHydrationWarning>
+            <body>
+                <IntroAnimation />
+            </body>
+        </html>
+    )
   }
   
   return (
