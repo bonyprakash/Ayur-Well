@@ -1,12 +1,10 @@
 'use client';
 
-import { Leaf } from 'lucide-react';
-
 export function IntroAnimation() {
   return (
     <div className="intro-leaf-screen">
       <div className="leaves-container">
-        {/* Generating multiple leaves for a fuller effect */}
+        {/* These divs will be styled into leaves by the CSS */}
         <div className="leaf"></div>
         <div className="leaf"></div>
         <div className="leaf"></div>
@@ -17,8 +15,7 @@ export function IntroAnimation() {
         <div className="leaf"></div>
       </div>
       <div className="intro-leaf-title">
-        <Leaf className="h-7 w-7 text-primary" />
-        <span className="font-bold text-2xl text-primary">NaturaLife</span>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">NaturaLife</h1>
       </div>
     </div>
   );

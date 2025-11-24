@@ -31,7 +31,7 @@ export default function RootLayout({
       const timer = setTimeout(() => {
         setShowIntro(false);
         sessionStorage.setItem('introShown', 'true');
-      }, 3000); // Total duration of the intro
+      }, 3000); // Animation duration + fade out
 
       return () => clearTimeout(timer);
     }
