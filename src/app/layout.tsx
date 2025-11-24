@@ -25,7 +25,7 @@ export default function RootLayout({
     // Hide the intro animation after a short delay
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 2500); // Animation duration + a little extra
+    }, 2000); // Animation duration + a little extra
 
     return () => clearTimeout(timer);
   }, []);

@@ -11,7 +11,7 @@ export function IntroAnimation({ onAnimationComplete }: IntroAnimationProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onAnimationComplete();
-    }, 2500); // Corresponds to the animation duration
+    }, 2000); // Corresponds to the animation duration
 
     return () => clearTimeout(timer);
   }, [onAnimationComplete]);
