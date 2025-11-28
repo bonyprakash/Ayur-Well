@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type {Metadata} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import {Toaster} from '@/components/ui/toaster';
@@ -24,13 +23,14 @@ export default function RootLayout({
 
   useEffect(() => {
     setIsClient(true);
+    // Use sessionStorage to only show animation once per session
     if (sessionStorage.getItem('introShown')) {
       setShowIntro(false);
     } else {
       const timer = setTimeout(() => {
         setShowIntro(false);
         sessionStorage.setItem('introShown', 'true');
-      }, 3500); // Corresponds to animation duration + fade out
+      }, 3500); // This duration should match your animation timings
 
       return () => clearTimeout(timer);
     }
