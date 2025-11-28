@@ -29,7 +29,7 @@ export function RemedyCard({ remedy }: RemedyCardProps) {
   const [helpful, setHelpful] = useState(false);
 
   const handleTriedChange = (checked: boolean) => {
-    setTried(checked);
+    setTried(!!checked);
     if (!checked) {
       setHelpful(false);
     }
