@@ -173,3 +173,5 @@ export default function HerbalRemediesPage() {
     </div>
   );
 }
+
+    

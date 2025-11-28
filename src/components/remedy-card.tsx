@@ -101,3 +101,5 @@ export function RemedyCard({ remedy }: RemedyCardProps) {
     </Card>
   );
 }
+
+    
