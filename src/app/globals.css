@@ -90,7 +90,11 @@
 
 @layer utilities {
     .animate-fade-in-up {
-        animation: fadeInUp 0.5s ease-out forwards;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out forwards;
     }
     
     .glassmorphism-card {
@@ -135,10 +139,6 @@
       pointer-events: none;
     }
 
-    .animate-fade-in {
-      animation: fadeIn 0.5s ease-in-out forwards;
-    }
-
     .bg-protein {
       background-color: var(--protein);
     }
@@ -150,13 +150,38 @@
     }
     
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInTitle {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOutIntro {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(105vh) rotate(720deg);
+            opacity: 0;
+        }
     }
 }
 
@@ -204,20 +229,6 @@
   transform: translateY(20px);
 }
 
-@keyframes fadeInTitle {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeOutIntro {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
 .falling-leaves {
     position: absolute;
     top: 0;
@@ -247,17 +258,6 @@
      mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path d="M111.42,128a16.5,16.5,0,0,1-16.5-16.5c0-17.7,16.5-29.33,16.5-43.29,0-13-11.64-23.57-26.29-23.57-13.88,0-25.12,10-25.12,22.4,0,10.22,12.79,16.5,17.26,16.5a1.2,1.2,0,0,1,0,2.41c-5.32,0-20.07-6.52-20.07-18.91,0-14.47,13.1-26,27.93-26,16,0,29.1,11.83,29.1,26.43,0,15.7-18.17,29.1-19.3,44.9H111.42A19.33,19.33,0,0,0,128,91.88,19.52,19.52,0,0,0,111.42,73,18.75,18.75,0,0,0,94.27,87.64a1.2,1.2,0,0,1-1.65,0,1.21,1.21,0,0,1,0-1.69,16.32,16.32,0,0,1,18.8-11.82,16.13,16.13,0,0,1,16.12,16.12,16.85,16.85,0,0,1-17.57,17.57H64a1.2,1.2,0,0,1-1.2-1.2V1.2A1.2,1.2,0,0,1,64,0h2.41a1.2,1.2,0,0,1,1.2,1.2V105.77H111.42a16.5,16.5,0,0,1,0,33Z" fill="white"/></svg>');
 }
 
-
-@keyframes fall {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(105vh) rotate(720deg);
-        opacity: 0;
-    }
-}
 
 .leaf:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; background-color: #ffcc80; }
 .leaf:nth-child(2) { left: 20%; animation-delay: -2s; animation-duration: 10s; background-color: #ef9a9a; }
