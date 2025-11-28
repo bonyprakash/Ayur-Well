@@ -6,8 +6,10 @@ export function IntroAnimation() {
         <div className="intro-content">
             <h1 className="intro-title">NaturaLife</h1>
         </div>
-
-        <div className="leaf-container">
+        <div className="falling-leaves">
+            {/* These divs will be styled as falling leaves */}
+            <div className="leaf"></div>
+            <div className="leaf"></div>
             <div className="leaf"></div>
             <div className="leaf"></div>
             <div className="leaf"></div>
