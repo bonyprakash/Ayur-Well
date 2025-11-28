@@ -2,30 +2,17 @@
 
 import { useState } from 'react';
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Leaf, AlertTriangle, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Header } from '@/components/header';
-import Image from 'next/image';
 import { translateContent } from '@/ai/flows/translate-content';
 import { useToast } from '@/hooks/use-toast';
+import { RemedyCard } from '@/components/remedy-card';
 
 const originalRemedies = [
   {
@@ -78,7 +65,7 @@ const originalRemedies = [
   },
 ];
 
-type Remedy = typeof originalRemedies[0];
+export type Remedy = typeof originalRemedies[0];
 
 const languages = [
   { value: 'en', label: 'English' },
@@ -177,48 +164,7 @@ export default function HerbalRemediesPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {remedies.map(remedy => (
-                <Card
-                  key={remedy.name}
-                  className="overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group rounded-xl"
-                >
-                  <div className="relative h-48 w-full">
-                      <Image src={remedy.image} alt={remedy.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint={remedy.hint} />
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <Leaf className="text-primary" /> {remedy.name}
-                    </CardTitle>
-                    <CardDescription className="pt-1 text-base">
-                      {remedy.benefit}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger>Details</AccordionTrigger>
-                        <AccordionContent>
-                          <div className="space-y-4">
-                            <div>
-                              <h4 className="font-semibold">How to Use</h4>
-                              <p className="text-muted-foreground text-sm">
-                                {remedy.usage}
-                              </p>
-                            </div>
-                            <div>
-                              <h4 className="font-semibold flex items-center gap-2 text-destructive/90">
-                                <AlertTriangle className="w-4 h-4" />
-                                Precautions
-                              </h4>
-                              <p className="text-muted-foreground text-sm">
-                                {remedy.precautions}
-                              </p>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
+                <RemedyCard key={remedy.name} remedy={remedy} />
               ))}
             </div>
           )}
@@ -227,3 +173,5 @@ export default function HerbalRemediesPage() {
     </div>
   );
 }
+
+    

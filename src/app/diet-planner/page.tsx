@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {z} from 'zod';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -66,7 +66,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
+import { UserProfileSheet } from '@/components/user-profile-sheet';
 
+type UserProfile = {
+  height: number | null;
+  weight: number | null;
+};
 
 const remedyFormSchema = z.object({
   problem: z.string().min(10, { message: 'Please describe your problem in at least 10 characters.' }),
@@ -111,6 +116,7 @@ export default function DietPlannerPage() {
   const [isLoadingRemedy, setIsLoadingRemedy] = useState(false);
   const [remedySuggestion, setRemedySuggestion] = useState<SuggestRemedyOutput | null>(null);
   const [results, setResults] = useState<WellnessPlanOutput & { dailyCalories?: number, bmi?: number } | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile>({ height: null, weight: null });
   const { toast } = useToast();
 
   const wellnessPlanForm = useForm<WellnessPlanFormValues>({
@@ -118,6 +124,8 @@ export default function DietPlannerPage() {
     defaultValues: {
       age: 25,
       gender: undefined,
+      height: undefined,
+      weight: undefined,
       lifestyle: undefined,
       healthGoals: [],
     },
@@ -126,6 +134,15 @@ export default function DietPlannerPage() {
   const remedyForm = useForm<z.infer<typeof remedyFormSchema>>({
     resolver: zodResolver(remedyFormSchema),
   });
+
+  useEffect(() => {
+    if (userProfile.height) {
+      wellnessPlanForm.setValue('height', userProfile.height);
+    }
+    if (userProfile.weight) {
+      wellnessPlanForm.setValue('weight', userProfile.weight);
+    }
+  }, [userProfile, wellnessPlanForm]);
   
   const calculateBMR = (values: WellnessPlanFormValues) => {
     const s = values.gender === 'male' ? 5 : -161;
@@ -193,7 +210,14 @@ export default function DietPlannerPage() {
   }
 
   const resetForm = () => {
-    wellnessPlanForm.reset();
+    wellnessPlanForm.reset({
+      age: 25,
+      gender: undefined,
+      height: userProfile.height || undefined,
+      weight: userProfile.weight || undefined,
+      lifestyle: undefined,
+      healthGoals: [],
+    });
     remedyForm.reset();
     setResults(null);
     setRemedySuggestion(null);
@@ -231,12 +255,22 @@ export default function DietPlannerPage() {
 
     return meals;
   }
+
+  const handleProfileSave = (profile: UserProfile) => {
+    setUserProfile(profile);
+    toast({
+        title: "Profile Saved!",
+        description: "Your height and weight have been updated.",
+    });
+  }
   
   const mealPlanCards = results ? parseMealPlan(results.mealPlan) : [];
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <Header />
+      <Header>
+        <UserProfileSheet userProfile={userProfile} onSave={handleProfileSave} />
+      </Header>
       <main className="flex-1 p-4 sm:p-6 md:p-8 animate-fade-in">
         <div className="mx-auto w-full max-w-7xl space-y-8">
             <div className="text-center space-y-2">
@@ -509,3 +543,5 @@ export default function DietPlannerPage() {
     </div>
   );
 }
+
+    
