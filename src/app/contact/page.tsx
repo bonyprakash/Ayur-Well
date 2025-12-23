@@ -28,7 +28,7 @@ export default function ContactPage() {
                             Get in Touch
                         </h1>
                         <p className="text-muted-foreground text-lg sm:text-xl">
-                            Have questions or feedback? We'd love to hear from you.
+                            Have questions or feedback? We\'d love to hear from you.
                         </p>
                     </div>
                     <Card className="shadow-lg w-full bg-green-50/50 rounded-2xl">
@@ -43,7 +43,7 @@ export default function ContactPage() {
                                 <div className="text-center p-8 bg-green-100 text-green-700 rounded-lg animate-fade-in flex flex-col items-center gap-4">
                                     <CheckCircle className="w-16 h-16 text-primary" />
                                     <h3 className="text-xl font-bold">Thank you for your message!</h3>
-                                    <p>We've received your submission and will get back to you shortly.</p>
+                                    <p>We\'ve received your submission and will get back to you shortly.</p>
                                     <Button variant="outline" onClick={() => setSubmitted(false)} className="mt-4">Send another message</Button>
                                 </div>
                            ) : (

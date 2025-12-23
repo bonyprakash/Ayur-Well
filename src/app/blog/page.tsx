@@ -39,7 +39,7 @@ const originalBlogPosts = [
     description: 'Explore how intermittent fasting can reset your body, improve metabolic health, and boost cellular repair.',
     image: placeholderImages.find(p => p.id === 'fasting-benefits'),
     content: `
-      <p>Fasting is not just about skipping meals; it's a profound practice that allows the body's digestive system to rest and initiate deep cellular cleansing. In naturopathy, it is considered one of the most effective ways to detoxify the body and reset metabolic functions.</p>
+      <p>Fasting is not just about skipping meals; it\'s a profound practice that allows the body\'s digestive system to rest and initiate deep cellular cleansing. In naturopathy, it is considered one of the most effective ways to detoxify the body and reset metabolic functions.</p>
       <br/>
       <h3 class="font-bold text-lg mb-2">Key Benefits:</h3>
       <ul class="list-disc pl-5 space-y-1">
@@ -81,7 +81,7 @@ const originalBlogPosts = [
       <ul class="list-disc pl-5 space-y-1">
         <li><strong>Cruciferous Vegetables:</strong> Broccoli, cauliflower, and leafy greens like kale contain compounds that support liver detoxification enzymes.</li>
         <li><strong>Berries and Citrus Fruits:</strong> These are packed with antioxidants that protect cells from damage caused by toxins. Lemon water in the morning is a classic way to kick-start this process.</li>
-        <li><strong>Garlic and Onions:</strong> These contain sulfur compounds that are essential for supporting the body's master antioxidant, glutathione.</li>
+        <li><strong>Garlic and Onions:</strong> These contain sulfur compounds that are essential for supporting the body\'s master antioxidant, glutathione.</li>
       </ul>
       <br/>
       <p>Remember to drink plenty of water to help your kidneys flush out waste products. Combining these foods with a diet low in processed ingredients is the best recipe for a natural, effective cleanse.</p>
