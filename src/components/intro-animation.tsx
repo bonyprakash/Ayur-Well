@@ -15,6 +15,8 @@ export function IntroAnimation() {
             <div className="leaf"></div>
             <div className="leaf"></div>
             <div className="leaf"></div>
+            <div className="leaf"></div>
+            <div className="leaf"></div>
         </div>
     </div>
   );

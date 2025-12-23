@@ -30,7 +30,7 @@ export default function RootLayout({
       const timer = setTimeout(() => {
         setShowIntro(false);
         sessionStorage.setItem('introShown', 'true');
-      }, 3500); // This duration should match your animation timings
+      }, 3000); // This duration should be slightly less than the fadeOutIntro animation
 
       return () => clearTimeout(timer);
     }
@@ -50,7 +50,7 @@ export default function RootLayout({
         )}
       >
         {isClient && showIntro && <IntroAnimation />}
-        <div className="flex-grow animate-fade-in">
+        <div className={`flex-grow ${!showIntro && 'animate-fade-in'}`}>
             {children}
         </div>
         <Toaster />
