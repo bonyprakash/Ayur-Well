@@ -7,12 +7,6 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {
   Loader2,
   Leaf,
-  HeartPulse,
-  Soup,
-  Flame,
-  PersonStanding,
-  Lightbulb,
-  X,
   WandSparkles,
   Sparkles,
   AlertTriangle,
@@ -236,15 +230,20 @@ export default function DietPlannerPage() {
     const mealTitles = ["Breakfast:", "Lunch:", "Dinner:", "Snacks:"];
     let currentPlan = mealPlan;
 
-    mealTitles.forEach((title, index) => {
-        const nextTitle = mealTitles[index + 1];
-        let mealContent;
-        if(currentPlan.includes(title)) {
-            if (nextTitle && currentPlan.includes(nextTitle)) {
-                mealContent = currentPlan.substring(currentPlan.indexOf(title) + title.length, currentPlan.indexOf(nextTitle)).trim();
-            } else {
-                mealContent = currentPlan.substring(currentPlan.indexOf(title) + title.length).trim();
-            }
+    mealTitles.forEach((title) => {
+        const startIndex = currentPlan.indexOf(title);
+        if (startIndex !== -1) {
+            // Find the start of the next meal's title to determine the end of the current meal's content
+            let endIndex = currentPlan.length;
+            mealTitles.forEach(nextTitle => {
+                if (title !== nextTitle) {
+                    const nextIndex = currentPlan.indexOf(nextTitle, startIndex + title.length);
+                    if (nextIndex !== -1 && nextIndex < endIndex) {
+                        endIndex = nextIndex;
+                    }
+                }
+            });
+            const mealContent = currentPlan.substring(startIndex + title.length, endIndex).trim();
             if(mealContent) meals.push({ title: title.replace(':', ''), items: mealContent });
         }
     });
@@ -282,34 +281,8 @@ export default function DietPlannerPage() {
                 </p>
             </div>
             
-            {results && (
-                 <Card className="w-full glassmorphism-card animate-fade-in-up">
-                    <CardHeader>
-                        <CardTitle className="text-xl">Your Profile Summary</CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                        <div className="p-4 bg-white/60 rounded-lg shadow-sm">
-                            <User className="mx-auto h-8 w-8 text-primary"/>
-                            <p className="text-sm text-muted-foreground mt-2">Age</p>
-                            <p className="text-xl font-bold">{wellnessPlanForm.getValues('age')}</p>
-                        </div>
-                        <div className="p-4 bg-white/60 rounded-lg shadow-sm">
-                             <p className="text-3xl font-bold">{results.bmi || 'N/A'}</p>
-                             <p className="text-sm text-muted-foreground">BMI</p>
-                        </div>
-                        <div className="p-4 bg-white/60 rounded-lg shadow-sm">
-                             <p className="text-3xl font-bold">{results.dailyCalories || 'N/A'}</p>
-                              <p className="text-sm text-muted-foreground">kcal/day</p>
-                        </div>
-                         <div className="p-4 bg-white/60 rounded-lg shadow-sm flex items-center justify-center">
-                            <Button onClick={resetForm} variant="outline" size="lg">Start Over</Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-1 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="space-y-8">
                     {/* Remedy Finder Card */}
                     <Card className="w-full glassmorphism-card">
                         <CardHeader>
@@ -395,14 +368,14 @@ export default function DietPlannerPage() {
                                         <FormField control={wellnessPlanForm.control} name="height" render={({field}) => (
                                             <FormItem>
                                                 <FormLabel>Height</FormLabel>
-                                                <FormControl><Input type="number" placeholder="cm" {...field} className="glassmorphism-input" /></FormControl>
+                                                <FormControl><Input type="number" placeholder="cm" {...field} value={field.value || ''} className="glassmorphism-input" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}/>
                                         <FormField control={wellnessPlanForm.control} name="weight" render={({field}) => (
                                             <FormItem>
                                                 <FormLabel>Weight</FormLabel>
-                                                <FormControl><Input type="number" placeholder="kg" {...field} className="glassmorphism-input" /></FormControl>
+                                                <FormControl><Input type="number" placeholder="kg" {...field} value={field.value || ''} className="glassmorphism-input" /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}/>
@@ -427,7 +400,7 @@ export default function DietPlannerPage() {
                                                     <FormItem className="flex flex-row items-center space-x-2 space-y-0">
                                                         <FormControl>
                                                             <Checkbox checked={field.value?.includes(item.id)} onCheckedChange={checked => {
-                                                                return checked ? field.onChange([...field.value, item.id]) : field.onChange(field.value?.filter(value => value !== item.id));
+                                                                return checked ? field.onChange([...(field.value || []), item.id]) : field.onChange(field.value?.filter(value => value !== item.id));
                                                             }}/>
                                                         </FormControl>
                                                         <FormLabel className="font-normal text-sm">{item.label}</FormLabel>
@@ -449,11 +422,35 @@ export default function DietPlannerPage() {
                 </div>
                 
                 {/* Results Section */}
-                <div className="lg:col-span-2">
+                <div>
                     {isLoadingPlan && <div className="flex justify-center items-center h-96"><Loader2 className="w-12 h-12 animate-spin text-primary"/></div>}
                     
                     {results && !isLoadingPlan && (
                         <div className="space-y-6 animate-fade-in-up">
+                            <Card className="w-full glassmorphism-card">
+                                <CardHeader>
+                                    <CardTitle className="text-xl">Your Profile Summary</CardTitle>
+                                </CardHeader>
+                                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                    <div className="p-4 bg-white/60 rounded-lg shadow-sm">
+                                        <User className="mx-auto h-8 w-8 text-primary"/>
+                                        <p className="text-sm text-muted-foreground mt-2">Age</p>
+                                        <p className="text-xl font-bold">{wellnessPlanForm.getValues('age')}</p>
+                                    </div>
+                                    <div className="p-4 bg-white/60 rounded-lg shadow-sm">
+                                        <p className="text-3xl font-bold">{results.bmi || 'N/A'}</p>
+                                        <p className="text-sm text-muted-foreground">BMI</p>
+                                    </div>
+                                    <div className="p-4 bg-white/60 rounded-lg shadow-sm">
+                                        <p className="text-3xl font-bold">{results.dailyCalories || 'N/A'}</p>
+                                        <p className="text-sm text-muted-foreground">kcal/day</p>
+                                    </div>
+                                    <div className="p-4 bg-white/60 rounded-lg shadow-sm flex items-center justify-center">
+                                        <Button onClick={resetForm} variant="outline" size="lg">Start Over</Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
                             <Card className="glassmorphism-card">
                                 <CardHeader>
                                     <CardTitle>Daily Nutrition Targets</CardTitle>
@@ -500,7 +497,7 @@ export default function DietPlannerPage() {
                         </div>
                     )}
                     {!results && !isLoadingPlan && (
-                        <div className="flex flex-col items-center justify-center text-center p-8 border-2 border-dashed rounded-2xl h-full min-h-[500px]">
+                        <div className="flex flex-col items-center justify-center text-center p-8 border-2 border-dashed rounded-2xl h-full min-h-[500px] lg:min-h-full">
                             <Leaf className="w-16 h-16 text-muted-foreground/50 mb-4" />
                             <h3 className="text-xl font-semibold">Your plan will appear here</h3>
                             <p className="text-muted-foreground mt-2 max-w-sm">Fill out your profile on the left to generate a personalized wellness and diet plan.</p>
@@ -513,5 +510,3 @@ export default function DietPlannerPage() {
     </div>
   );
 }
-
-    

@@ -101,7 +101,7 @@
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid hsl(var(--border) / 0.5);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     }
 
@@ -113,16 +113,16 @@
     }
     
     .gradient-button {
-      background-image: linear-gradient(to right, #4CAF68, #69d88a);
-      color: white;
+      background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)));
+      color: hsl(var(--primary-foreground));
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px 0 rgba(76, 175, 104, 0.2);
+      box-shadow: 0 4px 15px 0 hsla(var(--primary), 0.2);
     }
     
     .gradient-button:hover {
-      background-image: linear-gradient(to right, #69d88a, #4CAF68);
-      box-shadow: 0 6px 20px 0 rgba(76, 175, 104, 0.3);
-      transform: scale(1.03);
+        background-image: linear-gradient(to right, hsl(var(--secondary)), hsl(var(--primary)));
+        box-shadow: 0 6px 20px 0 hsla(var(--primary), 0.3);
+        transform: translateY(-2px);
     }
 
     .vignette {
@@ -259,5 +259,3 @@
 .leaf:nth-child(8) { left: 80%; animation-delay: -6s; animation-duration: 14s; --size: 22px; background-color: #9ccc65; }
 .leaf:nth-child(9) { left: 5%; animation-delay: -8s; animation-duration: 11s; --size: 24px; background-color: #7cb342; }
 .leaf:nth-child(10) { left: 90%; animation-delay: -7s; animation-duration: 15s; --size: 26px; background-color: #aed581; opacity: 0.85; }
-
-    

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Header } from '@/components/header';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,7 @@ export default function ContactPage() {
                             Get in Touch
                         </h1>
                         <p className="text-muted-foreground text-lg sm:text-xl">
-                            Have questions or feedback? We\'d love to hear from you.
+                            Have questions or feedback? We'd love to hear from you.
                         </p>
                     </div>
                     <Card className="shadow-lg w-full rounded-2xl glassmorphism-card">
@@ -40,14 +40,14 @@ export default function ContactPage() {
                         </CardHeader>
                         <CardContent>
                            {submitted ? (
-                                <div className="text-center p-8 bg-green-100/50 text-green-700 rounded-lg animate-fade-in flex flex-col items-center gap-4">
+                                <div className="text-center p-8 bg-primary/10 text-primary-foreground rounded-lg animate-fade-in flex flex-col items-center gap-4">
                                     <CheckCircle className="w-16 h-16 text-primary" />
-                                    <h3 className="text-xl font-bold">Thank you for your message!</h3>
-                                    <p>We\'ve received your submission and will get back to you shortly.</p>
+                                    <h3 className="text-xl font-bold text-primary">Thank you for your message!</h3>
+                                    <p className="text-muted-foreground">We've received your submission and will get back to you shortly.</p>
                                     <Button variant="outline" onClick={() => setSubmitted(false)} className="mt-4">Send another message</Button>
                                 </div>
                            ) : (
-                               <form onSubmit={handleSubmit} className="space-y-6">
+                               <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
                                     <div className="space-y-2">
                                         <Label htmlFor="name">Name</Label>
                                         <Input id="name" placeholder="Your Name" className="shadow-inner rounded-xl glassmorphism-input" required/>
@@ -70,5 +70,3 @@ export default function ContactPage() {
         </div>
     );
 }
-
-    
