@@ -40,7 +40,7 @@ export default function ContactPage() {
                         </CardHeader>
                         <CardContent>
                            {submitted ? (
-                                <div className="text-center p-8 bg-primary/10 text-primary-foreground rounded-lg animate-fade-in flex flex-col items-center gap-4">
+                                <div className="text-center p-8 bg-primary/10 rounded-lg animate-fade-in flex flex-col items-center gap-4">
                                     <CheckCircle className="w-16 h-16 text-primary" />
                                     <h3 className="text-xl font-bold text-primary">Thank you for your message!</h3>
                                     <p className="text-muted-foreground">We've received your submission and will get back to you shortly.</p>

@@ -168,23 +168,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom right, #f0fff0, #e6fff5);
+  background: linear-gradient(to bottom right, hsl(var(--background)), hsl(var(--accent)));
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   z-index: 9999;
   animation: fadeOutIntro 1.5s ease-out 2.5s forwards;
-}
-
-#introScreen::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.05));
 }
 
 .intro-content {
@@ -195,8 +185,8 @@
 .intro-title {
   font-size: 3rem;
   font-weight: 700;
-  color: #245C47;
-  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(76, 175, 104, 0.3);
+  color: hsl(var(--primary));
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8), 0 0 30px hsla(var(--primary), 0.3);
   animation: fadeInTitle 1.5s ease-out 0.5s forwards;
   opacity: 0;
   transform: translateY(20px);
@@ -218,7 +208,7 @@
   --size: 20px;
   width: var(--size);
   height: calc(var(--size) * 1.2);
-  background-color: #4CAF68; /* Base color */
+  background-color: hsla(var(--primary), 0.7);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   animation: fall 10s linear infinite;
 }
@@ -249,13 +239,13 @@
 }
 
 
-.leaf:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; --size: 30px; background-color: #69d88a; opacity: 0.8; }
-.leaf:nth-child(2) { left: 20%; animation-delay: -2s; animation-duration: 10s; --size: 15px; background-color: #4CAF68; opacity: 0.7; }
-.leaf:nth-child(3) { left: 30%; animation-delay: -4s; animation-duration: 13s; --size: 25px; background-color: #8fbc8f; opacity: 0.9; }
-.leaf:nth-child(4) { left: 40%; animation-delay: 0s; animation-duration: 9s; --size: 20px; background-color: #c5e1a5; }
-.leaf:nth-child(5) { left: 50%; animation-delay: -5s; animation-duration: 11s; --size: 35px; background-color: #a5d6a7; opacity: 0.8; }
-.leaf:nth-child(6) { left: 60%; animation-delay: -1s; animation-duration: 12s; --size: 18px; background-color: #4CAF68; opacity: 0.75; }
-.leaf:nth-child(7) { left: 70%; animation-delay: -3s; animation-duration: 10s; --size: 28px; background-color: #66bb6a; opacity: 0.9; }
-.leaf:nth-child(8) { left: 80%; animation-delay: -6s; animation-duration: 14s; --size: 22px; background-color: #9ccc65; }
-.leaf:nth-child(9) { left: 5%; animation-delay: -8s; animation-duration: 11s; --size: 24px; background-color: #7cb342; }
-.leaf:nth-child(10) { left: 90%; animation-delay: -7s; animation-duration: 15s; --size: 26px; background-color: #aed581; opacity: 0.85; }
+.leaf:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; --size: 30px; background-color: hsla(var(--secondary), 0.8); opacity: 0.8; }
+.leaf:nth-child(2) { left: 20%; animation-delay: -2s; animation-duration: 10s; --size: 15px; background-color: hsla(var(--primary), 0.7); opacity: 0.7; }
+.leaf:nth-child(3) { left: 30%; animation-delay: -4s; animation-duration: 13s; --size: 25px; background-color: hsla(var(--secondary), 0.7); opacity: 0.9; }
+.leaf:nth-child(4) { left: 40%; animation-delay: 0s; animation-duration: 9s; --size: 20px; background-color: hsla(var(--primary), 0.6); }
+.leaf:nth-child(5) { left: 50%; animation-delay: -5s; animation-duration: 11s; --size: 35px; background-color: hsla(var(--secondary), 0.8); opacity: 0.8; }
+.leaf:nth-child(6) { left: 60%; animation-delay: -1s; animation-duration: 12s; --size: 18px; background-color: hsla(var(--primary), 0.75); opacity: 0.75; }
+.leaf:nth-child(7) { left: 70%; animation-delay: -3s; animation-duration: 10s; --size: 28px; background-color: hsla(var(--secondary), 0.9); opacity: 0.9; }
+.leaf:nth-child(8) { left: 80%; animation-delay: -6s; animation-duration: 14s; --size: 22px; background-color: hsla(var(--primary), 0.65); }
+.leaf:nth-child(9) { left: 5%; animation-delay: -8s; animation-duration: 11s; --size: 24px; background-color: hsla(var(--secondary), 0.7); }
+.leaf:nth-child(10) { left: 90%; animation-delay: -7s; animation-duration: 15s; --size: 26px; background-color: hsla(var(--primary), 0.8); opacity: 0.85; }

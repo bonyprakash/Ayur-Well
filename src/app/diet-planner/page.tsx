@@ -422,8 +422,8 @@ export default function DietPlannerPage() {
                 </div>
                 
                 {/* Results Section */}
-                <div>
-                    {isLoadingPlan && <div className="flex justify-center items-center h-96"><Loader2 className="w-12 h-12 animate-spin text-primary"/></div>}
+                <div className="h-full">
+                    {isLoadingPlan && <div className="flex justify-center items-center h-full min-h-[500px] lg:min-h-full"><Loader2 className="w-12 h-12 animate-spin text-primary"/></div>}
                     
                     {results && !isLoadingPlan && (
                         <div className="space-y-6 animate-fade-in-up">
