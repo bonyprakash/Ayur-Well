@@ -31,7 +31,7 @@ export default function ContactPage() {
                             Have questions or feedback? We\'d love to hear from you.
                         </p>
                     </div>
-                    <Card className="shadow-lg w-full bg-green-50/50 rounded-2xl">
+                    <Card className="shadow-lg w-full rounded-2xl glassmorphism-card">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-3 text-2xl">
                                 <Leaf className="text-primary"/>
@@ -40,7 +40,7 @@ export default function ContactPage() {
                         </CardHeader>
                         <CardContent>
                            {submitted ? (
-                                <div className="text-center p-8 bg-green-100 text-green-700 rounded-lg animate-fade-in flex flex-col items-center gap-4">
+                                <div className="text-center p-8 bg-green-100/50 text-green-700 rounded-lg animate-fade-in flex flex-col items-center gap-4">
                                     <CheckCircle className="w-16 h-16 text-primary" />
                                     <h3 className="text-xl font-bold">Thank you for your message!</h3>
                                     <p>We\'ve received your submission and will get back to you shortly.</p>
@@ -50,15 +50,15 @@ export default function ContactPage() {
                                <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="name">Name</Label>
-                                        <Input id="name" placeholder="Your Name" className="shadow-md rounded-xl" required/>
+                                        <Input id="name" placeholder="Your Name" className="shadow-inner rounded-xl glassmorphism-input" required/>
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="email">Email</Label>
-                                        <Input id="email" type="email" placeholder="your.name@example.com" className="shadow-md rounded-xl" required/>
+                                        <Input id="email" type="email" placeholder="your.name@example.com" className="shadow-inner rounded-xl glassmorphism-input" required/>
                                     </div>
                                      <div className="space-y-2">
                                         <Label htmlFor="message">Message</Label>
-                                        <Textarea id="message" placeholder="Your message..." className="shadow-md rounded-xl min-h-[120px]" required/>
+                                        <Textarea id="message" placeholder="Your message..." className="shadow-inner rounded-xl min-h-[120px] glassmorphism-input" required/>
                                     </div>
                                     <Button type="submit" className="w-full sm:w-auto gradient-button text-white transition-transform duration-300 hover:scale-105 shadow-lg">Send Message</Button>
                                </form>
@@ -70,3 +70,5 @@ export default function ContactPage() {
         </div>
     );
 }
+
+    

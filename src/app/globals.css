@@ -102,6 +102,7 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     }
 
     .glassmorphism-input {
@@ -258,3 +259,5 @@
 .leaf:nth-child(8) { left: 80%; animation-delay: -6s; animation-duration: 14s; --size: 22px; background-color: #9ccc65; }
 .leaf:nth-child(9) { left: 5%; animation-delay: -8s; animation-duration: 11s; --size: 24px; background-color: #7cb342; }
 .leaf:nth-child(10) { left: 90%; animation-delay: -7s; animation-duration: 15s; --size: 26px; background-color: #aed581; opacity: 0.85; }
+
+    

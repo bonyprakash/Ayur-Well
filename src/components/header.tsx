@@ -15,7 +15,7 @@ import { useState } from 'react';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/diet-planner', label: 'Symptom Analyzer' },
+  { href: '/diet-planner', label: 'Diet Planner' },
   { href: '/herbal-remedies', label: 'Herbs' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
@@ -91,3 +91,5 @@ export function Header({children}: {children?: React.ReactNode}) {
     </header>
   );
 }
+
+    

@@ -454,7 +454,6 @@ export default function DietPlannerPage() {
                     
                     {results && !isLoadingPlan && (
                         <div className="space-y-6 animate-fade-in-up">
-                            {/* Nutrition Targets */}
                             <Card className="glassmorphism-card">
                                 <CardHeader>
                                     <CardTitle>Daily Nutrition Targets</CardTitle>
@@ -475,58 +474,29 @@ export default function DietPlannerPage() {
                                 </CardContent>
                             </Card>
 
-                            {/* Accordion for mobile, grid for desktop */}
-                            {/* Mobile View */}
-                            <div className="block lg:hidden">
-                                <Accordion type="single" collapsible className="w-full space-y-4" defaultValue="item-0">
-                                    {mealPlanCards.map((meal, index) => (
-                                        <AccordionItem value={`item-${index}`} key={index} className="glassmorphism-card rounded-xl border-none">
-                                            <AccordionTrigger className="p-4 text-lg font-semibold">{meal.title}</AccordionTrigger>
-                                            <AccordionContent className="p-4 pt-0">
-                                                <p className="text-muted-foreground whitespace-pre-line">{meal.items}</p>
-                                                <Button variant="ghost" size="sm" className="mt-2" onClick={() => copyToClipboard(meal.items)}><Copy className="mr-2 h-4 w-4"/> Copy</Button>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    ))}
-                                    <AccordionItem value="item-practices" className="glassmorphism-card rounded-xl border-none">
-                                        <AccordionTrigger className="p-4 text-lg font-semibold">Wellness Practices</AccordionTrigger>
-                                        <AccordionContent className="p-4 pt-0">
-                                            <p className="text-muted-foreground whitespace-pre-line">{results.wellnessPractices}</p>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-guidance" className="glassmorphism-card rounded-xl border-none">
-                                        <AccordionTrigger className="p-4 text-lg font-semibold">Nutritional Guidance</AccordionTrigger>
-                                        <AccordionContent className="p-4 pt-0">
-                                            <p className="text-muted-foreground whitespace-pre-line">{results.nutritionalGuidance}</p>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-                            </div>
-                            
-                            {/* Desktop View */}
-                            <div className="hidden lg:grid grid-cols-1 gap-6">
+                            <Accordion type="single" collapsible className="w-full space-y-4" defaultValue="item-0">
                                 {mealPlanCards.map((meal, index) => (
-                                    <Card key={index} className="glassmorphism-card">
-                                        <CardHeader>
-                                            <CardTitle>{meal.title}</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
+                                    <AccordionItem value={`item-${index}`} key={index} className="glassmorphism-card rounded-xl border-none">
+                                        <AccordionTrigger className="p-4 text-lg font-semibold">{meal.title}</AccordionTrigger>
+                                        <AccordionContent className="p-4 pt-0">
                                             <p className="text-muted-foreground whitespace-pre-line">{meal.items}</p>
-                                        </CardContent>
-                                        <CardFooter>
-                                            <Button variant="ghost" size="sm" onClick={() => copyToClipboard(meal.items)}><Copy className="mr-2 h-4 w-4"/> Copy</Button>
-                                        </CardFooter>
-                                    </Card>
+                                            <Button variant="ghost" size="sm" className="mt-2" onClick={() => copyToClipboard(meal.items)}><Copy className="mr-2 h-4 w-4"/> Copy</Button>
+                                        </AccordionContent>
+                                    </AccordionItem>
                                 ))}
-                                 <Card className="glassmorphism-card">
-                                    <CardHeader><CardTitle>Wellness Practices</CardTitle></CardHeader>
-                                    <CardContent><p className="text-muted-foreground whitespace-pre-line">{results.wellnessPractices}</p></CardContent>
-                                </Card>
-                                <Card className="glassmorphism-card">
-                                    <CardHeader><CardTitle>Nutritional Guidance</CardTitle></CardHeader>
-                                    <CardContent><p className="text-muted-foreground whitespace-pre-line">{results.nutritionalGuidance}</p></CardContent>
-                                </Card>
-                            </div>
+                                <AccordionItem value="item-practices" className="glassmorphism-card rounded-xl border-none">
+                                    <AccordionTrigger className="p-4 text-lg font-semibold">Wellness Practices</AccordionTrigger>
+                                    <AccordionContent className="p-4 pt-0">
+                                        <p className="text-muted-foreground whitespace-pre-line">{results.wellnessPractices}</p>
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-guidance" className="glassmorphism-card rounded-xl border-none">
+                                    <AccordionTrigger className="p-4 text-lg font-semibold">Nutritional Guidance</AccordionTrigger>
+                                    <AccordionContent className="p-4 pt-0">
+                                        <p className="text-muted-foreground whitespace-pre-line">{results.nutritionalGuidance}</p>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     )}
                     {!results && !isLoadingPlan && (
@@ -543,3 +513,5 @@ export default function DietPlannerPage() {
     </div>
   );
 }
+
+    
